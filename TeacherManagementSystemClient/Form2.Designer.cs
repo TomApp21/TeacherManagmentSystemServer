@@ -29,25 +29,102 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.panelContainer = new System.Windows.Forms.Panel();
+            this.userControl1 = new TeacherManagementSystemClient.UserControl1();
+            this.userControl2 = new TeacherManagementSystemClient.UserControl2();
+            this.userControl3 = new TeacherManagementSystemClient.UserControl3();
+            this.panel1.SuspendLayout();
+            this.panelContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(204, 95);
+            this.button1.Location = new System.Drawing.Point(48, 79);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.button3);
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(200, 450);
+            this.panel1.TabIndex = 1;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(48, 143);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(48, 224);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // panelContainer
+            // 
+            this.panelContainer.Controls.Add(this.userControl3);
+            this.panelContainer.Controls.Add(this.userControl2);
+            this.panelContainer.Controls.Add(this.userControl1);
+            this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContainer.Location = new System.Drawing.Point(200, 0);
+            this.panelContainer.Name = "panelContainer";
+            this.panelContainer.Size = new System.Drawing.Size(600, 450);
+            this.panelContainer.TabIndex = 2;
+            // 
+            // userControl1
+            // 
+            this.userControl1.Location = new System.Drawing.Point(78, 59);
+            this.userControl1.Name = "userControl1";
+            this.userControl1.Size = new System.Drawing.Size(465, 303);
+            this.userControl1.TabIndex = 0;
+            // 
+            // userControl2
+            // 
+            this.userControl2.Location = new System.Drawing.Point(-21, 23);
+            this.userControl2.Name = "userControl2";
+            this.userControl2.Size = new System.Drawing.Size(621, 377);
+            this.userControl2.TabIndex = 1;
+            // 
+            // userControl3
+            // 
+            this.userControl3.Location = new System.Drawing.Point(0, 0);
+            this.userControl3.Name = "userControl3";
+            this.userControl3.Size = new System.Drawing.Size(600, 450);
+            this.userControl3.TabIndex = 2;
             // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.panelContainer);
+            this.Controls.Add(this.panel1);
             this.Name = "Form2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form2";
+            this.panel1.ResumeLayout(false);
+            this.panelContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -55,5 +132,15 @@
         #endregion
 
         private Button button1;
+        private Panel panel1;
+        private Button button2;
+        private Button button3;
+        private Panel panelContainer;
+        private UserControl3 userControl31;
+        private UserControl2 userControl21;
+        private UserControl1 userControl11;
+        private UserControl3 userControl3;
+        private UserControl2 userControl2;
+        private UserControl1 userControl1;
     }
 }

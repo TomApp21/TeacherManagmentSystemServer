@@ -131,8 +131,6 @@ namespace TeacherManagementSystemClient
 
 
                 // Say hello to the server once a connection has been established.
-
-
                 sw.WriteLine("Hello from a client! Ready to do your bidding.");
                 sw.Flush();
 

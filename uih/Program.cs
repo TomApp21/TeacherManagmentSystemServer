@@ -1,10 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using MediatR;
-using ClassLibrary.DataAccess;
-using ClassLibrary;
-
-namespace TeacherManagementSystemClient
+namespace uih
 {
     internal static class Program
     {
@@ -17,7 +11,7 @@ namespace TeacherManagementSystemClient
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form2());
+            Application.Run(new Form1());
         }
     }
 }
