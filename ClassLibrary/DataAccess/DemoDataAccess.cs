@@ -6,11 +6,16 @@ namespace ClassLibrary.DataAccess
     {
         private List<TeacherModel> teachers = new List<TeacherModel>();
 
+        private List<UserModel> users = new List<UserModel>();
+
+        private List<ClassModel> classes = new List<ClassModel>();
+
+        private List<StudentModel> students = new List<StudentModel>();
+
         public DemoDataAccess()
         {
-            teachers.Add(new TeacherModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", ClassIds = new List<int> { 1, 2 } });
-            teachers.Add(new TeacherModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", ClassIds = new List<int> { 3, 4 } });
-
+            users.Add(new UserModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", IsTeacher = true }); 
+            users.Add(new UserModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", IsTeacher = true }) ;
         }
 
         public List<TeacherModel> GetTeachers()
@@ -26,6 +31,24 @@ namespace ClassLibrary.DataAccess
 
             return t;
         }
+
+        public List<UserModel> GetUsers()
+        {
+            return users;
+        }
+
+        public List<ClassModel> GetClassList()
+        {
+            return classes;
+        }
+
+        public List<ClassModel> InsertStudentToClass(string moduleCode, int classId, StudentModel student )
+        {
+
+
+        }
+
+
 
     }
 }

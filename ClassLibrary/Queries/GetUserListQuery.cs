@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary.Queries
 {
-    public class GetPersonListQuery : IRequest<List<TeacherModel>> {}
+    public class GetUserListQuery : IRequest<List<UserModel>> {}
 
 }

@@ -6,5 +6,9 @@ namespace ClassLibrary.DataAccess
     {
         List<TeacherModel> GetTeachers();
         TeacherModel InsertTeacher(string name, string userName, string password, List<int> classIds);
+
+        List<UserModel> GetUsers();
+
+        List<ClassModel> GetClassList();
     }
 }

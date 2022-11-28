@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClassLibrary.Handlers
+namespace ClassLibrary.Handlers.Commands
 {
     public class InsertTeacherHandler : IRequestHandler<InsertTeacherCommand, TeacherModel>
     {
