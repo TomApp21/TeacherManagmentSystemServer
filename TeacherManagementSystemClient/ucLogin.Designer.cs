@@ -1,6 +1,6 @@
 ﻿namespace TeacherManagementSystemClient
 {
-    partial class UserControl1
+    partial class ucLogin
     {
         /// <summary> 
         /// Required designer variable.
@@ -69,14 +69,16 @@
             // 
             // buttonLogin
             // 
+            this.buttonLogin.Enabled = false;
             this.buttonLogin.Location = new System.Drawing.Point(235, 237);
             this.buttonLogin.Name = "buttonLogin";
             this.buttonLogin.Size = new System.Drawing.Size(100, 23);
             this.buttonLogin.TabIndex = 4;
             this.buttonLogin.Text = "Log In";
             this.buttonLogin.UseVisualStyleBackColor = true;
+            this.buttonLogin.Click += new System.EventHandler(this.buttonLogin_Click);
             // 
-            // UserControl1
+            // ucLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,7 +87,7 @@
             this.Controls.Add(this.textBox1Password);
             this.Controls.Add(this.textBox1Username);
             this.Controls.Add(this.labelPassword);
-            this.Name = "UserControl1";
+            this.Name = "ucLogin";
             this.Size = new System.Drawing.Size(600, 450);
             this.ResumeLayout(false);
             this.PerformLayout();

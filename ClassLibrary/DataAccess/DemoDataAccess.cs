@@ -44,7 +44,8 @@ namespace ClassLibrary.DataAccess
 
         public List<ClassModel> InsertStudentToClass(string moduleCode, int classId, StudentModel student )
         {
-
+            // WRONG***
+            return classes;
 
         }
 

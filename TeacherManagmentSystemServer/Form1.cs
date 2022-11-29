@@ -6,6 +6,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using MediatR;
 using ClassLibrary.Queries;
+using ClassLibrary.Enum;
+using System.Text.Json;
+using System.Collections;
 
 namespace TeacherManagmentSystemServer
 {
@@ -27,7 +30,7 @@ namespace TeacherManagmentSystemServer
         private int _port;
 
         // declarations
-        List<TeacherModel> teachers;
+        List<UserModel> users;
 
 
         public Form1(IMediator mediator)
@@ -188,6 +191,102 @@ namespace TeacherManagmentSystemServer
         } // end ListenForIncomingClientConnections
 
 
+        //private async void ProcessClientRequests(object tcpClient)
+        //{
+        //    TcpClient client = (TcpClient)tcpClient;
+
+        //    // add to list so can broadcast messages to it and send shutdown events
+        //    _tcpClientList.Add(client);
+        //    _clientCount += 1;
+        //    _cnnctdClientsTextbox.InvokeExecute(cctb => cctb.Text = _clientCount.ToString());
+
+
+        //    string input = string.Empty;
+
+        //    try
+        //    {
+        //        StreamReader sr = new StreamReader(client.GetStream());
+        //        StreamWriter sw = new StreamWriter(client.GetStream());
+
+        //        while (client.Connected)
+        //        {
+        //            input = sr.ReadLine();  // block until it receives something from the client
+
+
+        //            var deserializedMsg = JsonSerializer.Deserialize<ArrayList>(input);
+        //            MessageTypeEnum messageId = (MessageTypeEnum)Enum.Parse(typeof(MessageTypeEnum), deserializedMsg[0].ToString());
+
+
+        //            switch (messageId)
+        //            {
+        //                 // implement commands here
+        //                //case ("GetTeachers"):
+        //                //    {
+        //                //        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "From client: " + client.GetHashCode() + ": " + input); // gets unique hash code (id) of client
+        //                //        SerializeTeachers(client.GetStream());
+        //                //        client.GetStream().Flush();
+        //                //        sw.WriteLine("Server received: " + input);
+
+        //                //        break;
+        //                //    }
+
+        //                case (MessageTypeEnum.UserLoginRequestResponse):
+        //                    {
+        //                        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "From client: " + client.GetHashCode() + ": " + input); // gets unique hash code (id) of client
+
+        //                        var x = await _mediator.Send(new GetUserByLoginQuery(deserializedMsg[1].ToString(), deserializedMsg[2].ToString()));
+
+        //                        ArrayList msg = new ArrayList();
+        //                        msg.Add(MessageTypeEnum.UserLoginRequestResponse);
+        //                        msg.Add(x.UserName);
+        //                        msg.Add(x.Password);
+        //                        msg.Add(x.UserId);
+        //                        msg.Add(x.Name);
+        //                        msg.Add(x.IsTeacher);
+
+        //                        var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+        //                        sw.WriteLine(serializedMsg);
+        //                        sw.Flush();
+
+
+        //                        //client.GetStream().Flush();
+        //                        //sw.WriteLine("Server received: " + input);
+
+        //                        break;
+        //                    }
+
+
+        //                default:
+        //                    {
+        //                        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "From client: " + client.GetHashCode() + ": " + deserializedMsg[1]); // gets unique hash code (id) of client
+        //                        sw.WriteLine(deserializedMsg[1]);
+        //                        sw.Flush();
+
+        //                        break;
+        //                    }
+        //            }
+        //        }
+        //    }
+        //    catch (SocketException se)
+        //    {
+        //        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "Problem processing client request.");
+        //        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + se.ToString());
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "Problem processing client request.");
+        //        _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + ex.ToString());
+        //    }
+
+        //    _tcpClientList.Remove(client);
+        //    _clientCount -= 1;
+        //    _cnnctdClientsTextbox.InvokeExecute(cctb => cctb.Text = _clientCount.ToString());
+        //    _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "Finished processing client requests for client:" + client.GetHashCode());
+        //}
+
         private void ProcessClientRequests(object tcpClient)
         {
             TcpClient client = (TcpClient)tcpClient;
@@ -214,16 +313,6 @@ namespace TeacherManagmentSystemServer
                     switch (input)
                     {
                         // implement commands here
-                        case ("GetTeachers"):
-                            {
-                                _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "From client: " + client.GetHashCode() + ": " + input); // gets unique hash code (id) of client
-                                SerializeTeachers(client.GetStream());
-                                client.GetStream().Flush();
-                                sw.WriteLine("Server received: " + input);
-
-                                break;
-                            }
-
 
                         default:
                             {
@@ -255,19 +344,15 @@ namespace TeacherManagmentSystemServer
         }
 
         #endregion
+    }
 
-        private async void SerializeTeachers(NetworkStream stream)
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            try
-            {
-                bf.Serialize(stream, await _mediator.Send(new GetPersonListQuery()));
-            }
-            catch (Exception ex)
-            {
 
-            }
-        }
+
+
+
+
+
+
 
 
         //private async Task<List<TeacherModel>> GetTeacherList()
@@ -277,5 +362,4 @@ namespace TeacherManagmentSystemServer
 
 
 
-    }
 }

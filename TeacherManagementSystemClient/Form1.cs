@@ -12,16 +12,6 @@ namespace TeacherManagementSystemClient
 {
     public partial class Form1 : Form
     {
-        static List<TeacherModel> DeserealizeTeachers(NetworkStream stream)
-        {
-            BinaryFormatter bf =   new BinaryFormatter();
-
-            var x = bf.Deserialize(stream);
-
-
-            return (List<TeacherModel>)bf.Deserialize(stream);
-        }
-
 
       // Constants
         private const String CRLF = "\r\n";
@@ -35,7 +25,7 @@ namespace TeacherManagementSystemClient
 
         private readonly IMediator _mediator;
 
-        List<TeacherModel> teachers= new List<TeacherModel>();
+        List<UserModel> users = new List<UserModel>();
 
         public Form1(IMediator mediator)
         {
@@ -45,18 +35,15 @@ namespace TeacherManagementSystemClient
             InitializeComponent();
 
 
-            _serverIpAddress = GetIPAddress(_ipAddressTextBox.Text);
-            _port = GetPort(_portTxtBox.Text);
+            _serverIpAddress =  IPAddress.Parse(LOCALHOST);
+            _port = DEFAULTPORT;
 
             _cnnctBtn.Enabled = true;
             _discnnctBtn.Enabled = false;
-            _sendCommandBtn.Enabled = false;    
+            _sendCommandBtn.Enabled = false;
+            
         }
 
-        private async void init()
-        {
-            teachers = await _mediator.Send(new GetPersonListQuery());
-        }
 
 
         #region Event Handlers
@@ -150,8 +137,7 @@ namespace TeacherManagementSystemClient
                                 {
                                     sw.WriteLine(input);
                                     sw.Flush();
-                                    teachers = DeserealizeTeachers(client.GetStream());
-                                    break;
+                                   break;
                                 }
 
                             default:
@@ -195,45 +181,6 @@ namespace TeacherManagementSystemClient
         }
 
 
-
-        private IPAddress GetIPAddress(string ipAddress)
-        {
-            IPAddress address = IPAddress.Parse(LOCALHOST);
-
-            try
-            {
-                if (!IPAddress.TryParse(ipAddress, out address)) {
-
-                    address = IPAddress.Parse(ipAddress);
-                }
-            }
-            catch (Exception ex)
-            {
-                _statusTextbox.Text += CRLF + "Invalid IP address - Client will connect to: " + _serverIpAddress.ToString();
-                _statusTextbox.Text += CRLF + ex.ToString();
-            }
-            return address;
-        }
-
-        private int GetPort(string serverPort)
-        {
-            int port = DEFAULTPORT;
-
-            try
-            {
-                if (!Int32.TryParse(serverPort, out port))
-                {
-
-                    port = 5000;
-                }
-            }
-            catch (Exception ex)
-            {
-                _statusTextbox.Text += CRLF + "Invalid port value - Client will connect to port: " + port.ToString();
-                _statusTextbox.Text += CRLF + ex.ToString();
-            }
-            return port;
-        }
 
 
         #endregion

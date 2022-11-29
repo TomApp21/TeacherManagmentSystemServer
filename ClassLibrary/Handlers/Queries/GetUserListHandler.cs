@@ -18,9 +18,9 @@ namespace ClassLibrary.Handlers.Queries
             _data = data;
         }
 
-        public Task<List<UserModel>> Handle(GetUserListHandler request, CancellationToken cancellationToken)
+        public Task<List<UserModel>> Handle(GetUserListQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_data.ge());
+            return Task.FromResult(_data.GetUsers());
         }
     }
 }

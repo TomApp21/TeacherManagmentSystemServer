@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClassLibrary.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,5 +15,7 @@ namespace ClassLibrary.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool IsTeacher { get; set; }
+
+        public MessageTypeEnum messageType { get;set; }
     }
 }

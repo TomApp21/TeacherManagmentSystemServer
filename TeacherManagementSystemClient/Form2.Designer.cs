@@ -33,9 +33,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.panelContainer = new System.Windows.Forms.Panel();
-            this.userControl1 = new TeacherManagementSystemClient.UserControl1();
-            this.userControl2 = new TeacherManagementSystemClient.UserControl2();
             this.userControl3 = new TeacherManagementSystemClient.UserControl3();
+            this.userControl2 = new TeacherManagementSystemClient.UserControl2();
+            this.ucLogin = new TeacherManagementSystemClient.ucLogin();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.btnDisconnect = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panelContainer.SuspendLayout();
             this.SuspendLayout();
@@ -52,6 +54,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnDisconnect);
+            this.panel1.Controls.Add(this.btnConnect);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.button1);
@@ -85,19 +89,19 @@
             // 
             this.panelContainer.Controls.Add(this.userControl3);
             this.panelContainer.Controls.Add(this.userControl2);
-            this.panelContainer.Controls.Add(this.userControl1);
+            this.panelContainer.Controls.Add(this.ucLogin);
             this.panelContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelContainer.Location = new System.Drawing.Point(200, 0);
             this.panelContainer.Name = "panelContainer";
             this.panelContainer.Size = new System.Drawing.Size(600, 450);
             this.panelContainer.TabIndex = 2;
             // 
-            // userControl1
+            // userControl3
             // 
-            this.userControl1.Location = new System.Drawing.Point(78, 59);
-            this.userControl1.Name = "userControl1";
-            this.userControl1.Size = new System.Drawing.Size(465, 303);
-            this.userControl1.TabIndex = 0;
+            this.userControl3.Location = new System.Drawing.Point(0, 0);
+            this.userControl3.Name = "userControl3";
+            this.userControl3.Size = new System.Drawing.Size(600, 450);
+            this.userControl3.TabIndex = 2;
             // 
             // userControl2
             // 
@@ -106,12 +110,31 @@
             this.userControl2.Size = new System.Drawing.Size(621, 377);
             this.userControl2.TabIndex = 1;
             // 
-            // userControl3
+            // userControl1
             // 
-            this.userControl3.Location = new System.Drawing.Point(0, 0);
-            this.userControl3.Name = "userControl3";
-            this.userControl3.Size = new System.Drawing.Size(600, 450);
-            this.userControl3.TabIndex = 2;
+            this.ucLogin.Location = new System.Drawing.Point(78, 59);
+            this.ucLogin.Name = "ucLogin";
+            this.ucLogin.Size = new System.Drawing.Size(465, 303);
+            this.ucLogin.TabIndex = 0;
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(48, 375);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(75, 23);
+            this.btnConnect.TabIndex = 5;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Location = new System.Drawing.Point(48, 405);
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(75, 23);
+            this.btnDisconnect.TabIndex = 6;
+            this.btnDisconnect.Text = "Disconnect";
+            this.btnDisconnect.UseVisualStyleBackColor = true;
             // 
             // Form2
             // 
@@ -136,11 +159,11 @@
         private Button button2;
         private Button button3;
         private Panel panelContainer;
-        private UserControl3 userControl31;
-        private UserControl2 userControl21;
-        private UserControl1 userControl11;
+                private TeacherManagementSystemClient.ucLogin ucLogin; 
+
         private UserControl3 userControl3;
         private UserControl2 userControl2;
-        private UserControl1 userControl1;
+        private Button btnDisconnect;
+        private Button btnConnect;
     }
 }
