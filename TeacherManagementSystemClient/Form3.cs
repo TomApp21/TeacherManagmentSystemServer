@@ -1,5 +1,6 @@
 ﻿
 using ClassLibrary.Enum;
+using ClassLibrary.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace TeacherManagementSystemClient
         private int _port;
         private TcpClient _client;
 
+        private UserModel thisUser;
 
 
         public Form3()
@@ -121,14 +123,25 @@ namespace TeacherManagementSystemClient
                 sr = new StreamReader(client.GetStream());
                 sw = new StreamWriter(client.GetStream());
 
+                // Build initial client connection message
+                // ---------------------------------------
+                ArrayList msg = new ArrayList();
+                msg.Add(MessageTypeEnum.ClientConnection);
+
+                var serializedMsg = JsonSerializer.Serialize(msg);
+
 
                 // Say hello to the server once a connection has been established.
-                sw.WriteLine("Hello from a client! Ready to do your bidding.");
+                sw.WriteLine(serializedMsg);
                 sw.Flush();
 
                 while(client.Connected)
                 {
                     input = sr.ReadLine(); // block until server sends something.
+
+                    var deserializedMsg = JsonSerializer.Deserialize<ArrayList>(input);
+                    MessageTypeEnum messageId = (MessageTypeEnum)Enum.Parse(typeof(MessageTypeEnum), deserializedMsg[0].ToString());
+
 
                     if (input == null)
                     {
@@ -136,14 +149,78 @@ namespace TeacherManagementSystemClient
                     }
                     else
                     {
-                         switch (input)
+                         switch (messageId)
                         {
-                            case ("Server received: GetTeachers"):
+                            case (MessageTypeEnum.UserLoginRequestResponse):
                                 {
-                                    sw.WriteLine(input);
-                                    sw.Flush();
+                                    
+                                    UserModel userModel = new UserModel();
+                                    userModel.UserName = deserializedMsg[1].ToString();
+                                    userModel.Password = deserializedMsg[2].ToString();
+                                    userModel.UserId = Convert.ToInt32(deserializedMsg[3].ToString());
+                                    userModel.Name = deserializedMsg[4].ToString();
+                                    userModel.IsTeacher = Convert.ToBoolean(deserializedMsg[5].ToString());
+
+                                    thisUser = userModel;
+
+                                    // show logout button
+                                    btnLogout.Enabled = true;
+                                    ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
+                                    ucTeacherMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+                                    GetTeacherClasses();
+
+                                    //sw.WriteLine(input);
+                                    //sw.Flush();
                                    break;
                                 }
+                            case (MessageTypeEnum.GetClassesList) :
+                                {
+
+                                    List<ClassModel> teachersClassesModel = new List<ClassModel>();
+                                    Dictionary<int, string> classes = new Dictionary<int, string>();
+
+                                    String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
+                                    String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
+
+
+                                    var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second)
+
+              
+
+
+
+
+
+
+
+
+
+
+
+                                    //teachers
+
+                                    //userModel.UserName = deserializedMsg[1].ToString();
+                                    //userModel.Password = deserializedMsg[2].ToString();
+                                    //userModel.UserId = Convert.ToInt32(deserializedMsg[3].ToString());
+                                    //userModel.Name = deserializedMsg[4].ToString();
+                                    //userModel.IsTeacher = Convert.ToBoolean(deserializedMsg[5].ToString());
+
+                                    //thisUser = userModel;
+
+                                    // show logout button
+                                    btnLogout.Enabled = true;
+                                    ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
+                                    ucTeacherMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+                                    GetTeacherClasses();
+
+                                    //sw.WriteLine(input);
+                                    //sw.Flush();
+                                   break;
+                                }
+
+
 
                             default:
                                 {
@@ -172,8 +249,8 @@ namespace TeacherManagementSystemClient
             {
                 _client.Close();
                 //_statusTextbox.InvokeExecute(stb => stb.Text += String.Empty);
-                btnConnect.InvokeExecute(cb => cb.Enabled = true);
-                btnDisconnect.InvokeExecute(dcb => dcb.Enabled = false);
+                btnConnect.InvokeExecute(cb => cb.Enabled = false);
+                btnDisconnect.InvokeExecute(dcb => dcb.Enabled = true);
                 //btns.InvokeExecute(dcb => dcb.Enabled = false);
                 //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Disconnected from the server!");
 
@@ -215,6 +292,33 @@ namespace TeacherManagementSystemClient
             }
         }
 
+        public void GetTeacherClasses()
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetClassesList);
+                    msg.Add(thisUser.UserId);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
 
 
 
@@ -241,8 +345,15 @@ namespace TeacherManagementSystemClient
             }
         }
 
- 
-
-
+        /// <summary>
+        /// Log user out, hide nav menu options, show lg
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            thisUser = new UserModel();
+            ucLogin1.BringToFront();
+        }
     }
 }

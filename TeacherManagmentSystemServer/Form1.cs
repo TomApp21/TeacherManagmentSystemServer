@@ -287,7 +287,7 @@ namespace TeacherManagmentSystemServer
         //    _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "Finished processing client requests for client:" + client.GetHashCode());
         //}
 
-        private void ProcessClientRequests(object tcpClient)
+        private async void ProcessClientRequests(object tcpClient)
         {
             TcpClient client = (TcpClient)tcpClient;
 
@@ -308,11 +308,72 @@ namespace TeacherManagmentSystemServer
                 {
                     input = sr.ReadLine(); // block until it receives something from the client
 
+                    var deserializedMsg = JsonSerializer.Deserialize<ArrayList>(input);
+                    MessageTypeEnum messageId = (MessageTypeEnum)Enum.Parse(typeof(MessageTypeEnum), deserializedMsg[0].ToString());
+
                     // something comes from client
 
-                    switch (input)
+                    switch (messageId)
                     {
                         // implement commands here
+
+                        case (MessageTypeEnum.ClientConnection) :
+                        {
+                            _statusTextBox.InvokeExecute(stb => stb.Text += CRLF + "From client: " + client.GetHashCode() + ": " + input); // gets unique hash code (id) of client
+                            break;
+                        }
+                        case (MessageTypeEnum.UserLoginRequestResponse) :
+                        {
+
+                            var x = await _mediator.Send(new GetUserByLoginQuery(deserializedMsg[1].ToString(), deserializedMsg[2].ToString()));
+
+                            ArrayList msg = new ArrayList();
+                            msg.Add(MessageTypeEnum.UserLoginRequestResponse);
+                            msg.Add(x.UserName);
+                            msg.Add(x.Password);
+                            msg.Add(x.UserId);
+                            msg.Add(x.Name);
+                            msg.Add(x.IsTeacher);
+
+                            var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                            sw.WriteLine(serializedMsg);
+                            sw.Flush();
+                            break;
+                        }
+                        case (MessageTypeEnum.GetClassesList) :
+                        {
+
+                            List<ClassModel> teachersClasses =  await _mediator.Send(new GetClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
+
+                            ArrayList msg = new ArrayList();
+
+                            string classIds = String.Empty;
+                            string classNames = String.Empty;
+
+                                // build up string to serialize
+                                // ----------------------------
+                            foreach (var classy in teachersClasses)
+                            {
+                                classIds += classy.ClassId.ToString() + ",";
+                                classNames += classy.ClassName.ToString() + ",";
+                            }
+
+                            msg.Add(MessageTypeEnum.GetClassesList);
+                            msg.Add(classIds);
+                            msg.Add(classNames);
+
+
+                            var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                            sw.WriteLine(serializedMsg);
+                            sw.Flush();
+                            break;
+                        }
+
+
 
                         default:
                             {

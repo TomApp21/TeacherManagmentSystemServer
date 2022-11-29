@@ -10,16 +10,16 @@ namespace ClassLibrary.Models
     public class ClassModel
     {
         public int ClassId { get; set; }
-        public int ClassName { get; set; }
+        public string ClassName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int TeacherId { get; set; }
-        public List<StudentModel> Students { get; set; }
+        public List<int> StudentId { get; set; }
         public Dictionary<int, double> Assignments { get; set; }
 
         public int ModuleCode { get; set; }
 
-                public MessageTypeEnum messageType { get;set; }
+        public MessageTypeEnum messageType { get;set; }
 
     }
 }
