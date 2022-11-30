@@ -28,6 +28,10 @@ namespace TeacherManagementSystemClient
 
         public Dictionary<string, string> TeachersClasses { get; set; }
 
+        public bool DeleteEnabled
+        {
+            set { btnDelete.Enabled = value; }
+        }
         public string SelectedClassValue {
             get { return listboxTeacherClasses.SelectedValue.ToString();  }
         }
@@ -85,9 +89,11 @@ namespace TeacherManagementSystemClient
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
-        {
-            if (this.DeleteClassClicked != null)
+        { 
+                if (this.DeleteClassClicked != null)
                 this.DeleteClassClicked(this, new EventArgs());
+
+            
         }
 
         private void listboxTeacherClasses_SelectedValueChanged(object sender, EventArgs e)

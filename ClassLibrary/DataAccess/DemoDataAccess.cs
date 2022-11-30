@@ -62,7 +62,16 @@ namespace ClassLibrary.DataAccess
         public ClassModel InsertClass(string className, DateTime startDate, DateTime endDate, int teacherId,  string moduleCode, List<int> studentIds, Dictionary<int, double> assignmentScores)
         {
             ClassModel c = new ClassModel() { ClassName = className, StartDate = startDate, EndDate = endDate, TeacherId = teacherId, ModuleCode = moduleCode, StudentId = studentIds, Assignments = assignmentScores };
-            c.ClassId = classes.Max(x => x.ClassId) + 1;
+            
+            if (classes.Count == 0)
+            {
+                c.ClassId = 1;
+            }
+            else
+            {
+                c.ClassId = classes.Max(x => x.ClassId) + 1;
+            }
+            
             classes.Add(c);
 
             return c;

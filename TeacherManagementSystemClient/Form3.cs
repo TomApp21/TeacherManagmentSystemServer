@@ -200,6 +200,7 @@ namespace TeacherManagementSystemClient
                                     List<ClassModel> teachersClassesModel = new List<ClassModel>();
                                     Dictionary<int, string> classes = new Dictionary<int, string>();
 
+                          
                                     String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
                                     String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
 
@@ -519,8 +520,22 @@ namespace TeacherManagementSystemClient
         /// </summary>
         private void PopulateTeacherClassesListbox(Dictionary<string, string> teachersClasses)
         {
+
+            if (teachersClasses.ContainsKey(String.Empty))
+            {
+                teachersClasses.Remove(String.Empty);
+                ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = false);
+            }
+            else
+            {
+                ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
+            }
+            
             ucTeacherMainView1.InvokeExecute(x => x.TeachersClasses = teachersClasses);
             ucTeacherMainView1.InvokeExecute(x => x.UpdateDataSource());
+            
+
+
 
         }
 
@@ -571,5 +586,9 @@ namespace TeacherManagementSystemClient
             }
         }
 
+        private void Form3_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
