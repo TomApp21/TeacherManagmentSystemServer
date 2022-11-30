@@ -51,6 +51,11 @@ namespace ClassLibrary.DataAccess
             return classes;
         }
 
+        public List<StudentModel> GetStudentList()
+        {
+            return students;
+        }
+
         public List<ClassModel> InsertStudentToClass(string moduleCode, int classId, StudentModel student )
         {
             // WRONG***

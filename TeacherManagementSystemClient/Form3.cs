@@ -20,7 +20,7 @@ namespace TeacherManagementSystemClient
 {
     public partial class Form3 : Form
     {
-       // Constants
+        // Constants
         private const String CRLF = "\r\n";
         private const String LOCALHOST = "127.0.0.1";
         private const int DEFAULTPORT = 5000;
@@ -43,7 +43,7 @@ namespace TeacherManagementSystemClient
             InitializeComponent();
             ucLogin1.BringToFront();
 
-            _serverIpAddress =  IPAddress.Parse(LOCALHOST);
+            _serverIpAddress = IPAddress.Parse(LOCALHOST);
             _port = DEFAULTPORT;
 
             btnConnect.Enabled = true;
@@ -55,13 +55,14 @@ namespace TeacherManagementSystemClient
             this.ucLogin1.LoginClicked += new EventHandler(LoginEventHandler_LoginClicked);
             this.ucTeacherMainView1.SortByNumberStudentsClicked += new EventHandler(SortByNumStudentsAsc_SortByNumStudentsClicked);
             this.ucTeacherMainView1.SortByNumberStudentsDescClicked += new EventHandler(SortByNumStudentsDesc_SortByNumStudentsClicked);
-                        this.ucTeacherMainView1.CreateClassClicked += new EventHandler(CreateClass_CreateClassClicked);
+            this.ucTeacherMainView1.CreateClassClicked += new EventHandler(CreateClass_CreateClassClicked);
 
             this.userControl31.CreateClassBtnClicked += new EventHandler(CreateClassForm_Clicked);
-                        this.ucTeacherMainView1.DeleteClassClicked += new EventHandler(DeleteClass_Clicked);
+            this.ucTeacherMainView1.DeleteClassClicked += new EventHandler(DeleteClass_Clicked);
 
             this.ucTeacherMainView1.SelectedValueChanged += new EventHandler(SelectedClassValue_Changed);
-            
+
+            this.ucTeacherMainView1.ViewClassClicked += new EventHandler(ViewClass_Clicked);
         }
 
 
@@ -93,10 +94,10 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
-        
+
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-                        DisconnectFromServer();
+            DisconnectFromServer();
 
         }
 
@@ -133,7 +134,7 @@ namespace TeacherManagementSystemClient
         {
             // cast as TcpClient to get access to all associated methods.
             TcpClient client = (TcpClient)tcpClient;
-            
+
             string input = String.Empty;
             StreamReader sr = null;
             StreamWriter sw = null;
@@ -155,7 +156,7 @@ namespace TeacherManagementSystemClient
                 sw.WriteLine(serializedMsg);
                 sw.Flush();
 
-                while(client.Connected)
+                while (client.Connected)
                 {
                     input = sr.ReadLine(); // block until server sends something.
 
@@ -169,11 +170,11 @@ namespace TeacherManagementSystemClient
                     }
                     else
                     {
-                         switch (messageId)
+                        switch (messageId)
                         {
                             case (MessageTypeEnum.UserLoginRequestResponse):
                                 {
-                                    
+
                                     UserModel userModel = new UserModel();
                                     userModel.UserName = deserializedMsg[1].ToString();
                                     userModel.Password = deserializedMsg[2].ToString();
@@ -192,38 +193,56 @@ namespace TeacherManagementSystemClient
 
                                     //sw.WriteLine(input);
                                     //sw.Flush();
-                                   break;
+                                    break;
                                 }
-                            case (MessageTypeEnum.GetClassesList) :
+                            case (MessageTypeEnum.GetClassesList):
                                 {
 
                                     List<ClassModel> teachersClassesModel = new List<ClassModel>();
                                     Dictionary<int, string> classes = new Dictionary<int, string>();
 
-                          
-                                    String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
-                                    String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
-
-
-                                    var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
-                                    
-                                    PopulateTeacherClassesListbox(dic2);
-                                   break;
-                                }
-                                case (MessageTypeEnum.GetClassesOrderedByStudents) :
-                                {
-
-                                    List<ClassModel> teachersClassesModel = new List<ClassModel>();
-                                    Dictionary<int, string> classes = new Dictionary<int, string>();
 
                                     String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
                                     String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
 
 
                                     var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
-                                    
+
                                     PopulateTeacherClassesListbox(dic2);
-                                   break;
+                                    break;
+                                }
+                            case (MessageTypeEnum.GetClassesOrderedByStudents):
+                                {
+
+                                    List<ClassModel> teachersClassesModel = new List<ClassModel>();
+                                    Dictionary<int, string> classes = new Dictionary<int, string>();
+
+                                    String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
+                                    String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
+
+
+                                    var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
+
+                                    PopulateTeacherClassesListbox(dic2);
+                                    break;
+                                }
+                            case (MessageTypeEnum.GetStudentsForClass):
+                                {
+                                    teacherViewClass1.InvokeExecute(x => x.BringToFront());
+                                    teacherViewClass1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+                                    
+                                    Dictionary<int, string> students = new Dictionary<int, string>();
+
+                                    String[] strStudentIdList = deserializedMsg[1].ToString().Split(',');
+                                    String[] strStudentNameList = deserializedMsg[2].ToString().Split(',');
+
+
+                                    var dic = strStudentIdList.Zip(strStudentNameList).ToDictionary(x => x.First, x => x.Second);
+
+                                    PopulateStudentsListbox(dic);
+
+                                    break;
                                 }
 
 
@@ -246,7 +265,7 @@ namespace TeacherManagementSystemClient
 
             btnConnect.InvokeExecute(cb => cb.Enabled = true);
             btnDisconnect.InvokeExecute(dcb => dcb.Enabled = false);
-            
+
             btnHome.InvokeExecute(cb => cb.Visible = false);
             btnLogout.InvokeExecute(cb => cb.Visible = false);
         }
@@ -264,7 +283,7 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Disconnected from the server!");
 
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Problem disconnecting from the server.");
                 //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF +  ex.ToString());
@@ -358,7 +377,7 @@ namespace TeacherManagementSystemClient
         }
 
         #endregion
-        
+
         #region Teacher Class View Event Handlers
 
         public void SortByNumStudentsAsc_SortByNumStudentsClicked(object sender, EventArgs e)
@@ -416,7 +435,7 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
-        
+
         public void CreateClass_CreateClassClicked(object sender, EventArgs e)
         {
             userControl31.InvokeExecute(x => x.BringToFront());
@@ -454,6 +473,7 @@ namespace TeacherManagementSystemClient
         {
             selectedClassValue = ucTeacherMainView1.SelectedClassValue;
         }
+
 
 
         #endregion
@@ -498,6 +518,36 @@ namespace TeacherManagementSystemClient
 
 
 
+        public void ViewClass_Clicked(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetStudentsForClass);
+                    msg.Add(thisUser.UserId);
+                    msg.Add(selectedClassValue);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                                teacherViewClass1.InvokeExecute(x => x.BringToFront());
+
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
         #region
         #endregion
 
@@ -505,17 +555,17 @@ namespace TeacherManagementSystemClient
 
 
 
-        
 
 
-        
+
+
 
 
 
 
 
         #region Control Data Sources
-                /// <summary>
+        /// <summary>
         /// Updates datasource on user control.
         /// </summary>
         private void PopulateTeacherClassesListbox(Dictionary<string, string> teachersClasses)
@@ -530,16 +580,31 @@ namespace TeacherManagementSystemClient
             {
                 ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
             }
-            
+
             ucTeacherMainView1.InvokeExecute(x => x.TeachersClasses = teachersClasses);
             ucTeacherMainView1.InvokeExecute(x => x.UpdateDataSource());
-            
-
-
-
         }
 
-        
+                /// <summary>
+        /// Updates datasource on user control.
+        /// </summary>
+        private void PopulateStudentsListbox(Dictionary<string, string> theseStudents)
+        {
+
+            //if (theseStudents.ContainsKey(String.Empty))
+            //{
+            //    theseStudents.Remove(String.Empty);
+            //    ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = false);
+            //}
+            //else
+            //{
+            //    ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
+            //}
+
+            teacherViewClass1.InvokeExecute(x => x.Students = theseStudents);
+            teacherViewClass1.InvokeExecute(x => x.UpdateDataSource());
+        }
+
 
         #endregion
 

@@ -89,6 +89,7 @@
             this.btnViewClass.TabIndex = 4;
             this.btnViewClass.Text = "View ";
             this.btnViewClass.UseVisualStyleBackColor = true;
+            this.btnViewClass.Click += new System.EventHandler(this.btnViewClass_Click);
             // 
             // btnCreate
             // 

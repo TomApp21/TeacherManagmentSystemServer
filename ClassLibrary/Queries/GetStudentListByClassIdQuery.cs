@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary.Queries
 {
-    public class GetStudentListByClassIdQuery : IRequest<List<StudentModel>>
+    public class GetClassesByTeacherIdQuery : IRequest<List<ClassModel>>
     {
         public int Id { get; set; }
-        public GetStudentListByClassIdQuery(int id)
+        public GetClassesByTeacherIdQuery(int id)
         {
             Id = id;
         }

@@ -28,6 +28,8 @@ namespace ClassLibrary.Enum
             //JoinClass, // Log a new student against a class. Requieres[ClassStudentDataModel],
             ClientConnection,
             CreateClass,
+            GetStudentsForClass,
+            ViewTeachersClass,
     }
      public enum _MessageTypes
         {

@@ -11,6 +11,7 @@ namespace ClassLibrary.DataAccess
 
         List<ClassModel> GetClassList();
 
+        List<StudentModel> GetStudentList();
         ClassModel InsertClass(string className, DateTime startDate, DateTime endDate, int teacherId,  string moduleCode, List<int> studentIds, Dictionary<int, double> assignmentScores);
 
         void RemoveClass(int classId);

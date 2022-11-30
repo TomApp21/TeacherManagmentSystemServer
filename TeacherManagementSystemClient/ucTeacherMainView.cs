@@ -18,6 +18,7 @@ namespace TeacherManagementSystemClient
                                         public event EventHandler DeleteClassClicked;
 
         public event EventHandler SelectedValueChanged;
+        public event EventHandler ViewClassClicked;
 
 
 
@@ -100,6 +101,12 @@ namespace TeacherManagementSystemClient
         {
                         if (this.SelectedValueChanged != null)
                 this.SelectedValueChanged(this, new EventArgs());
+        }
+
+        private void btnViewClass_Click(object sender, EventArgs e)
+        {
+                     if (this.ViewClassClicked != null)
+                this.ViewClassClicked(this, new EventArgs());
         }
     }
 }

@@ -394,6 +394,20 @@ namespace TeacherManagmentSystemServer
                                 break;
 
                             }
+                        case (MessageTypeEnum.GetStudentsForClass):
+                            {
+                                List<StudentModel> classStudents = await _mediator.Send(new GetStudentListByClassIdQuery(Convert.ToInt32(deserializedMsg[2].ToString())));
+
+                                var serializedMsg = UpdateStudentListDataSource(classStudents);
+                                
+                                    sw.WriteLine(serializedMsg);
+                                    sw.Flush();
+                                
+                                
+                                
+                                
+                                break;
+                            }
 
 
 
@@ -442,7 +456,7 @@ namespace TeacherManagmentSystemServer
 
             if(teachersClasses.Count != 0)
             {
-                                foreach (var classy in teachersClasses)
+                foreach (var classy in teachersClasses)
                 {
                     classIds += classy.ClassId.ToString() + ",";
                     classNames += classy.ClassName.ToString() + ",";
@@ -466,6 +480,44 @@ namespace TeacherManagmentSystemServer
             return serializedMsg;
 
         }
+
+        private string UpdateStudentListDataSource(List<StudentModel> theseStudents)
+        {
+            ArrayList msg = new ArrayList();
+
+            string studentIds = String.Empty;
+            string studentNames = String.Empty;
+
+                // build up string to serialize
+                // ----------------------------
+
+            if(theseStudents.Count != 0)
+            {
+                foreach (var student in theseStudents)
+                {
+                    studentIds += student.StudentId.ToString() + ",";
+                    studentNames += student.StudentName.ToString() + ",";
+                }
+                            
+            // Remove comma from last char
+            //----------------------------------------
+            studentIds = studentIds.Substring(0, studentIds.Length - 1);
+            studentNames = studentNames.Substring(0, studentNames.Length - 1);
+            }
+
+            msg.Add(MessageTypeEnum.GetStudentsForClass);
+            msg.Add(studentIds);
+            msg.Add(studentNames);
+
+
+            var serializedMsg = JsonSerializer.Serialize(msg);
+
+            return serializedMsg;
+        }
+
+
+
+
     }
 
 
