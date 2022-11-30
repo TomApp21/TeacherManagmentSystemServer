@@ -17,7 +17,7 @@ namespace ClassLibrary.Models
         public List<int> StudentId { get; set; }
         public Dictionary<int, double> Assignments { get; set; }
 
-        public int ModuleCode { get; set; }
+        public string ModuleCode { get; set; }
 
         public MessageTypeEnum messageType { get;set; }
 

@@ -59,6 +59,24 @@ namespace ClassLibrary.DataAccess
         }
 
 
+        public ClassModel InsertClass(string className, DateTime startDate, DateTime endDate, int teacherId,  string moduleCode, List<int> studentIds, Dictionary<int, double> assignmentScores)
+        {
+            ClassModel c = new ClassModel() { ClassName = className, StartDate = startDate, EndDate = endDate, TeacherId = teacherId, ModuleCode = moduleCode, StudentId = studentIds, Assignments = assignmentScores };
+            c.ClassId = classes.Max(x => x.ClassId) + 1;
+            classes.Add(c);
+
+            return c;
+        }
+
+        public void RemoveClass(int classId)
+        {
+            ClassModel c = (ClassModel)classes.Where(x => x.ClassId == classId).FirstOrDefault();
+            classes.Remove(c);
+
+            // remove CLASS FROM ALL STUDENTS?
+
+        }
+
 
     }
 }

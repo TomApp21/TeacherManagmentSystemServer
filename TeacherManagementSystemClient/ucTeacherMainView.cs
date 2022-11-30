@@ -14,6 +14,11 @@ namespace TeacherManagementSystemClient
     {
                         public event EventHandler SortByNumberStudentsClicked;
                         public event EventHandler SortByNumberStudentsDescClicked;
+                                public event EventHandler CreateClassClicked;
+                                        public event EventHandler DeleteClassClicked;
+
+        public event EventHandler SelectedValueChanged;
+
 
 
         public ucTeacherMainView()
@@ -22,6 +27,10 @@ namespace TeacherManagementSystemClient
         }
 
         public Dictionary<string, string> TeachersClasses { get; set; }
+
+        public string SelectedClassValue {
+            get { return listboxTeacherClasses.SelectedValue.ToString();  }
+        }
 
 
         public void UpdateDataSource()
@@ -69,6 +78,22 @@ namespace TeacherManagementSystemClient
                 this.SortByNumberStudentsDescClicked(this, new EventArgs());
         }
 
+        private void btnCreate_Click(object sender, EventArgs e)
+        {
+                                    if (this.CreateClassClicked != null)
+                this.CreateClassClicked(this, new EventArgs());
+        }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (this.DeleteClassClicked != null)
+                this.DeleteClassClicked(this, new EventArgs());
+        }
+
+        private void listboxTeacherClasses_SelectedValueChanged(object sender, EventArgs e)
+        {
+                        if (this.SelectedValueChanged != null)
+                this.SelectedValueChanged(this, new EventArgs());
+        }
     }
 }

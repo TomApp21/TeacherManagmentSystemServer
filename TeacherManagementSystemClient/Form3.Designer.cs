@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnHome = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -40,6 +41,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnHome);
             this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Controls.Add(this.btnDisconnect);
             this.panel1.Controls.Add(this.btnConnect);
@@ -48,6 +50,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(200, 450);
             this.panel1.TabIndex = 0;
+            // 
+            // btnHome
+            // 
+            this.btnHome.Location = new System.Drawing.Point(54, 41);
+            this.btnHome.Name = "btnHome";
+            this.btnHome.Size = new System.Drawing.Size(75, 23);
+            this.btnHome.TabIndex = 3;
+            this.btnHome.Text = "Home";
+            this.btnHome.UseVisualStyleBackColor = true;
+            this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
             // 
             // btnLogout
             // 
@@ -68,6 +80,7 @@
             this.btnDisconnect.TabIndex = 1;
             this.btnDisconnect.Text = "Disconnect";
             this.btnDisconnect.UseVisualStyleBackColor = true;
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // btnConnect
             // 
@@ -81,9 +94,13 @@
             // 
             // userControl31
             // 
+            this.userControl31.ClassName = "";
+            this.userControl31.EndDate = new System.DateTime(2022, 11, 30, 14, 11, 12, 495);
             this.userControl31.Location = new System.Drawing.Point(188, -3);
+            this.userControl31.ModuleCode = "";
             this.userControl31.Name = "userControl31";
             this.userControl31.Size = new System.Drawing.Size(600, 450);
+            this.userControl31.StartDate = new System.DateTime(2022, 11, 30, 14, 11, 12, 499);
             this.userControl31.TabIndex = 1;
             // 
             // ucLogin1
@@ -102,6 +119,7 @@
             this.ucTeacherMainView1.Name = "ucTeacherMainView1";
             this.ucTeacherMainView1.Size = new System.Drawing.Size(150, 150);
             this.ucTeacherMainView1.TabIndex = 2;
+            this.ucTeacherMainView1.TeachersClasses = null;
             // 
             // Form3
             // 
@@ -128,5 +146,6 @@
         private TeacherManagementSystemClient.ucLogin ucLogin1;
         private Button btnLogout;
         private ucTeacherMainView ucTeacherMainView1;
+        private Button btnHome;
     }
 }

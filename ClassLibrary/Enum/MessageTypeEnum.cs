@@ -26,7 +26,8 @@ namespace ClassLibrary.Enum
             GetJoinAuthenticationMessage, // Get athorization to join the class
             //ModifyClass, // Edit/Add a class. Requieres[ClassDataModel]
             //JoinClass, // Log a new student against a class. Requieres[ClassStudentDataModel],
-            ClientConnection
+            ClientConnection,
+            CreateClass,
     }
      public enum _MessageTypes
         {

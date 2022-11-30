@@ -9,6 +9,7 @@ using ClassLibrary.Queries;
 using ClassLibrary.Enum;
 using System.Text.Json;
 using System.Collections;
+using ClassLibrary.Commands;
 
 namespace TeacherManagmentSystemServer
 {
@@ -308,6 +309,13 @@ namespace TeacherManagmentSystemServer
                 {
                     input = sr.ReadLine(); // block until it receives something from the client
 
+                    // Disconnect Client
+                    // -----------------
+                    if (input == null)
+                    {
+                        break;
+                    }
+
                     var deserializedMsg = JsonSerializer.Deserialize<ArrayList>(input);
                     MessageTypeEnum messageId = (MessageTypeEnum)Enum.Parse(typeof(MessageTypeEnum), deserializedMsg[0].ToString());
 
@@ -347,31 +355,7 @@ namespace TeacherManagmentSystemServer
 
                             List<ClassModel> teachersClasses =  await _mediator.Send(new GetClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
 
-                            ArrayList msg = new ArrayList();
-
-                            string classIds = String.Empty;
-                            string classNames = String.Empty;
-
-                                // build up string to serialize
-                                // ----------------------------
-                            foreach (var classy in teachersClasses)
-                            {
-                                classIds += classy.ClassId.ToString() + ",";
-                                classNames += classy.ClassName.ToString() + ",";
-                            }
-                            
-                            // Remove comma from last char
-                            //----------------------------------------
-                            classIds = classIds.Substring(0, classIds.Length - 1);
-                            classNames = classNames.Substring(0, classNames.Length - 1);
-
-                            msg.Add(MessageTypeEnum.GetClassesList);
-                            msg.Add(classIds);
-                            msg.Add(classNames);
-
-
-                            var serializedMsg = JsonSerializer.Serialize(msg);
-
+                            var serializedMsg = UpdateDataSource(teachersClasses);
 
                             sw.WriteLine(serializedMsg);
                             sw.Flush();
@@ -382,37 +366,34 @@ namespace TeacherManagmentSystemServer
 
                                 List<ClassModel> teachersClasses = await _mediator.Send(new GetSortedClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString()),Convert.ToBoolean(deserializedMsg[2].ToString())));
 
-                                ArrayList msg = new ArrayList();
+                                    var serializedMsg = UpdateDataSource(teachersClasses);
+                                    sw.WriteLine(serializedMsg);
+                                    sw.Flush();
 
-                                string classIds = String.Empty;
-                                string classNames = String.Empty;
-
-                                // build up string to serialize
-                                // ----------------------------
-                                foreach (var classy in teachersClasses)
-                                {
-                                    classIds += classy.ClassId.ToString() + ",";
-                                    classNames += classy.ClassName.ToString() + ",";
-                                }
-
-                                // Remove comma from last char
-                                //----------------------------------------
-                                classIds = classIds.Substring(0, classIds.Length - 1);
-                                classNames = classNames.Substring(0, classNames.Length - 1);
-
-                                msg.Add(MessageTypeEnum.GetClassesOrderedByStudents);
-                                msg.Add(classIds);
-                                msg.Add(classNames);
-
-
-                                var serializedMsg = JsonSerializer.Serialize(msg);
-
-
-                                sw.WriteLine(serializedMsg);
-                                sw.Flush();
                                 break;
                             }
+                            case (MessageTypeEnum.CreateClass) :
+                            {
 
+                                ClassModel addedClass = await _mediator.Send(new InsertClassCommand(deserializedMsg[2].ToString(), deserializedMsg[3].ToString(), deserializedMsg[4].ToString(), deserializedMsg[1].ToString(), deserializedMsg[5].ToString()));
+
+                                break;
+                            }
+                            case (MessageTypeEnum.DeleteClass) :
+                            {
+                                await _mediator.Send(new RemoveClassCommand(Convert.ToInt32(deserializedMsg[2].ToString())));
+                                
+                                // Get refreshed data
+                                // ------------------
+                                List<ClassModel> teachersClasses =  await _mediator.Send(new GetClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
+
+                                    var serializedMsg = UpdateDataSource(teachersClasses);
+                                    sw.WriteLine(serializedMsg);
+                                    sw.Flush();
+                                
+                                break;
+
+                            }
 
 
 
@@ -447,6 +428,44 @@ namespace TeacherManagmentSystemServer
         }
 
         #endregion
+
+        private string UpdateDataSource(List<ClassModel> teachersClasses)
+        {
+
+            ArrayList msg = new ArrayList();
+
+            string classIds = String.Empty;
+            string classNames = String.Empty;
+
+                // build up string to serialize
+                // ----------------------------
+
+            if(teachersClasses.Count != 0)
+            {
+                                foreach (var classy in teachersClasses)
+                {
+                    classIds += classy.ClassId.ToString() + ",";
+                    classNames += classy.ClassName.ToString() + ",";
+                }
+                            
+            // Remove comma from last char
+            //----------------------------------------
+            classIds = classIds.Substring(0, classIds.Length - 1);
+            classNames = classNames.Substring(0, classNames.Length - 1);
+            }
+
+
+
+            msg.Add(MessageTypeEnum.GetClassesList);
+            msg.Add(classIds);
+            msg.Add(classNames);
+
+
+            var serializedMsg = JsonSerializer.Serialize(msg);
+
+            return serializedMsg;
+
+        }
     }
 
 

@@ -50,6 +50,7 @@
             this.listboxTeacherClasses.Name = "listboxTeacherClasses";
             this.listboxTeacherClasses.Size = new System.Drawing.Size(250, 319);
             this.listboxTeacherClasses.TabIndex = 0;
+            this.listboxTeacherClasses.SelectedValueChanged += new System.EventHandler(this.listboxTeacherClasses_SelectedValueChanged);
             // 
             // lblClasses
             // 
@@ -97,6 +98,7 @@
             this.btnCreate.TabIndex = 5;
             this.btnCreate.Text = "Create";
             this.btnCreate.UseVisualStyleBackColor = true;
+            this.btnCreate.Click += new System.EventHandler(this.btnCreate_Click);
             // 
             // btnDelete
             // 
@@ -106,6 +108,7 @@
             this.btnDelete.TabIndex = 6;
             this.btnDelete.Text = "Delete";
             this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
             // listboxBroadcastMsg
             // 

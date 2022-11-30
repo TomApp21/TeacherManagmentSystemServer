@@ -36,6 +36,7 @@ namespace TeacherManagementSystemClient
         private Dictionary<string, string> teachersClasses = new Dictionary<string, string>();
 
 
+        private string selectedClassValue;
 
         public Form3()
         {
@@ -47,13 +48,19 @@ namespace TeacherManagementSystemClient
 
             btnConnect.Enabled = true;
             btnDisconnect.Enabled = false;
+            btnHome.Visible = false;
+            btnLogout.Visible = false;
             //_sendCommandBtn.Enabled = false;
 
             this.ucLogin1.LoginClicked += new EventHandler(LoginEventHandler_LoginClicked);
             this.ucTeacherMainView1.SortByNumberStudentsClicked += new EventHandler(SortByNumStudentsAsc_SortByNumStudentsClicked);
             this.ucTeacherMainView1.SortByNumberStudentsDescClicked += new EventHandler(SortByNumStudentsDesc_SortByNumStudentsClicked);
+                        this.ucTeacherMainView1.CreateClassClicked += new EventHandler(CreateClass_CreateClassClicked);
 
+            this.userControl31.CreateClassBtnClicked += new EventHandler(CreateClassForm_Clicked);
+                        this.ucTeacherMainView1.DeleteClassClicked += new EventHandler(DeleteClass_Clicked);
 
+            this.ucTeacherMainView1.SelectedValueChanged += new EventHandler(SelectedClassValue_Changed);
             
         }
 
@@ -61,8 +68,8 @@ namespace TeacherManagementSystemClient
 
         #region Event Handlers
 
-        // Connect to a server
-        private void ConnectButtonHandler(object sender, EventArgs e)
+
+        private void btnConnect_Click(object sender, EventArgs e)
         {
             try
             {
@@ -73,7 +80,12 @@ namespace TeacherManagementSystemClient
 
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = true;
-                //_sendCommandBtn.Enabled = true;
+                ucLogin1.LogInBtnEnabled = true;
+
+                btnHome.Visible = true;
+                btnLogout.Visible = true;
+
+                //btnDisconnect.Enabled = true; SEND
             }
             catch (Exception ex)
             {
@@ -81,13 +93,14 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
-
-
-
-        private void DisconnectButtonHandler(object sender, EventArgs e)
+        
+        private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            DisconnectFromServer();
+                        DisconnectFromServer();
+
         }
+
+
 
 
         //private void SendCommandButtonHandler(object sender, EventArgs e)
@@ -193,11 +206,7 @@ namespace TeacherManagementSystemClient
 
                                     var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
                                     
-                                    // Add to local store
-                                    // ------------------
-                                    teachersClasses = dic2;
-
-                                    PopulateTeacherClassesListbox();
+                                    PopulateTeacherClassesListbox(dic2);
                                    break;
                                 }
                                 case (MessageTypeEnum.GetClassesOrderedByStudents) :
@@ -212,11 +221,7 @@ namespace TeacherManagementSystemClient
 
                                     var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
                                     
-                                    // Add to local store
-                                    // ------------------
-                                    teachersClasses = dic2;
-
-                                    PopulateTeacherClassesListbox();
+                                    PopulateTeacherClassesListbox(dic2);
                                    break;
                                 }
 
@@ -240,6 +245,9 @@ namespace TeacherManagementSystemClient
 
             btnConnect.InvokeExecute(cb => cb.Enabled = true);
             btnDisconnect.InvokeExecute(dcb => dcb.Enabled = false);
+            
+            btnHome.InvokeExecute(cb => cb.Visible = false);
+            btnLogout.InvokeExecute(cb => cb.Visible = false);
         }
 
 
@@ -249,8 +257,8 @@ namespace TeacherManagementSystemClient
             {
                 _client.Close();
                 //_statusTextbox.InvokeExecute(stb => stb.Text += String.Empty);
-                btnConnect.InvokeExecute(cb => cb.Enabled = false);
-                btnDisconnect.InvokeExecute(dcb => dcb.Enabled = true);
+                btnConnect.InvokeExecute(cb => cb.Enabled = true);
+                btnDisconnect.InvokeExecute(dcb => dcb.Enabled = false);
                 //btns.InvokeExecute(dcb => dcb.Enabled = false);
                 //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Disconnected from the server!");
 
@@ -297,26 +305,7 @@ namespace TeacherManagementSystemClient
 
         #endregion
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                _client = new TcpClient(_serverIpAddress.ToString(), _port);
-                Thread t = new Thread(ProcessClientTransactions);
-                t.IsBackground = true;
-                t.Start(_client);
 
-                btnConnect.Enabled = false;
-                btnDisconnect.Enabled = true;
-                ucLogin1.LogInBtnEnabled = true;
-                //btnDisconnect.Enabled = true; SEND
-            }
-            catch (Exception ex)
-            {
-                //_statusTextbox.Text += CRLF + "Problem connecting to server.";
-                //_statusTextbox.Text += CRLF + ex.ToString();
-            }
-        }
 
         /// <summary>
         /// Log user out, hide nav menu options, show lg
@@ -331,7 +320,12 @@ namespace TeacherManagementSystemClient
 
 
 
-        #region controls event handlers
+        #region Main Form Event Handlers
+
+
+        #endregion
+
+        #region Login Event Handlers
 
         public void LoginEventHandler_LoginClicked(object sender, EventArgs e)
         {
@@ -361,6 +355,10 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
+
+        #endregion
+        
+        #region Teacher Class View Event Handlers
 
         public void SortByNumStudentsAsc_SortByNumStudentsClicked(object sender, EventArgs e)
         {
@@ -417,36 +415,161 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
+        
+        public void CreateClass_CreateClassClicked(object sender, EventArgs e)
+        {
+            userControl31.InvokeExecute(x => x.BringToFront());
+        }
+
+        public void DeleteClass_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.DeleteClass);
+                    msg.Add(thisUser.UserId);
+                    msg.Add(selectedClassValue);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+        private void SelectedClassValue_Changed(object sender, EventArgs e)
+        {
+            selectedClassValue = ucTeacherMainView1.SelectedClassValue;
+        }
 
 
-        #endregion 
+        #endregion
+
+        #region Teacher Create Class View Event Handler
+
+        public void CreateClassForm_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.CreateClass);
+                    msg.Add(thisUser.UserId);
+                    msg.Add(userControl31.ClassName);
+                    msg.Add(userControl31.StartDate);
+                    msg.Add(userControl31.EndDate);
+                    msg.Add(userControl31.ModuleCode);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+
+                    userControl31.InvokeExecute(x => x.InitializeForm());
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+        #endregion
 
 
 
+        #region
+        #endregion
+
+
+
+
+
+        
+
+
+        
 
 
 
 
 
         #region Control Data Sources
-
-
-        /// <summary>
+                /// <summary>
         /// Updates datasource on user control.
         /// </summary>
-        private void PopulateTeacherClassesListbox()
+        private void PopulateTeacherClassesListbox(Dictionary<string, string> teachersClasses)
         {
             ucTeacherMainView1.InvokeExecute(x => x.TeachersClasses = teachersClasses);
             ucTeacherMainView1.InvokeExecute(x => x.UpdateDataSource());
 
         }
 
+        
 
         #endregion
 
 
+        /// <summary>
+        /// Format windows/ show hide controls depending on role.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnHome_Click(object sender, EventArgs e)
+        {
+            if (thisUser.IsTeacher)
+            {
+                try
+                {
+                    if (_client.Connected)
+                    {
+                        StreamWriter sw = new StreamWriter(_client.GetStream());
 
+                        ArrayList msg = new ArrayList();
+                        msg.Add(MessageTypeEnum.GetClassesOrderedByStudents);
+                        msg.Add(thisUser.UserId);
+                        msg.Add("true");
 
+                        var serializedMsg = JsonSerializer.Serialize(msg);
+
+                        sw.WriteLine(serializedMsg);
+                        sw.Flush();
+
+                        ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
+                        //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                        //_commandTextbox.Text = String.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                    //_statusTextbox.Text += CRLF + ex.ToString();
+                }
+            }
+            else
+            {
+
+            }
+        }
 
     }
 }
