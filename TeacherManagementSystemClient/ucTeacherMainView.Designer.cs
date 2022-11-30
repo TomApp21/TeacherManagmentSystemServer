@@ -66,6 +66,7 @@
             this.btnSortName.TabIndex = 2;
             this.btnSortName.Text = "Sort By Name";
             this.btnSortName.UseVisualStyleBackColor = true;
+            this.btnSortName.Click += new System.EventHandler(this.btnSortName_Click);
             // 
             // btnSortNo
             // 

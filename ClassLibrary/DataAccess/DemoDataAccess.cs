@@ -16,6 +16,10 @@ namespace ClassLibrary.DataAccess
         {
             users.Add(new UserModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", IsTeacher = true }); 
             users.Add(new UserModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", IsTeacher = true }) ;
+
+            classes.Add(new ClassModel { ClassId = 1, ClassName = "Maths", TeacherId = 1 }); // efill whole model out
+            classes.Add(new ClassModel { ClassId = 2, ClassName = "Geography", TeacherId = 1 });
+
         }
 
         public List<TeacherModel> GetTeachers()

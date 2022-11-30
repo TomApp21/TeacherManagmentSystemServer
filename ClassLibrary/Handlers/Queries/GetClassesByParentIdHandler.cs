@@ -23,7 +23,7 @@ namespace ClassLibrary.Handlers.Queries
         public async Task<List<ClassModel>> Handle(GetClassesByParentIdQuery request, CancellationToken cancellationToken)
         {
             var results = await _mediator.Send(new GetClassListQuery());
-            var output = (List<ClassModel>)results.Where(x => x.Students.Where(y => y.ParentId == request.Id).Any());
+            var output = (List<ClassModel>)results.Where(x => x.ClassId == request.Id).ToList();  // WRONG! Any());
 
             return output;
 
