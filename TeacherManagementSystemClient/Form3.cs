@@ -37,6 +37,7 @@ namespace TeacherManagementSystemClient
 
 
         private string selectedClassValue;
+        private string selectedStudentValue;
 
         public Form3()
         {
@@ -63,6 +64,11 @@ namespace TeacherManagementSystemClient
             this.ucTeacherMainView1.SelectedValueChanged += new EventHandler(SelectedClassValue_Changed);
 
             this.ucTeacherMainView1.ViewClassClicked += new EventHandler(ViewClass_Clicked);
+
+            this.teacherViewClass1.ViewStudentMark += new EventHandler(ViewStudentMark_Clicked);
+            this.teacherViewClass1.SelectedStudentValueChanged += new EventHandler(SelectedStudentValue_Changed);
+
+            this.teacherViewClass1.SubmitStudentMarkClicked += new EventHandler(SubmitMark_Clicked);
         }
 
 
@@ -244,6 +250,18 @@ namespace TeacherManagementSystemClient
 
                                     break;
                                 }
+                            case (MessageTypeEnum.GetStudentMark):
+                                {
+                                    teacherViewClass1.InvokeExecute(x => x.StudentMark = deserializedMsg[1].ToString());
+
+                                    break;
+                                }
+                            //case (MessageTypeEnum.SubmitStudentMark):
+                            //    {
+                            //        teacherViewClass1.InvokeExecute(x => x.StudentMark = deserializedMsg[1].ToString());
+
+                            //        break;
+                            //    }
 
 
 
@@ -452,7 +470,7 @@ namespace TeacherManagementSystemClient
                     ArrayList msg = new ArrayList();
                     msg.Add(MessageTypeEnum.DeleteClass);
                     msg.Add(thisUser.UserId);
-                    msg.Add(selectedClassValue);
+                    msg.Add(ucTeacherMainView1.SelectedClassValue);
 
                     var serializedMsg = JsonSerializer.Serialize(msg);
 
@@ -515,7 +533,82 @@ namespace TeacherManagementSystemClient
         }
 
         #endregion
+        public void SelectedStudentValue_Changed(object sender, EventArgs e)
+        {
+            selectedStudentValue = teacherViewClass1.SelectedStudentValue;
+        }
+        
 
+        public void ViewStudentMark_Clicked(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetStudentMark);
+                    msg.Add(thisUser.UserId);
+                    msg.Add(teacherViewClass1.SelectedStudentValue);  // selectedStudentValue);
+                    msg.Add(ucTeacherMainView1.SelectedClassValue);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                    teacherViewClass1.InvokeExecute(x => x.SubmitBtnEnabled = true);
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void SubmitMark_Clicked(object sender, EventArgs e)
+        { 
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.SubmitStudentMark);
+                    msg.Add(teacherViewClass1.SelectedStudentValue); // selectedStudentValue);
+                    msg.Add(ucTeacherMainView1.SelectedClassValue);
+                    msg.Add(teacherViewClass1.StudentMark);
+
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+
+                    teacherViewClass1.InvokeExecute(x => x.SubmitBtnEnabled = false);
+
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+        
+        
 
 
         public void ViewClass_Clicked(object sender, EventArgs e)
@@ -530,7 +623,7 @@ namespace TeacherManagementSystemClient
                     ArrayList msg = new ArrayList();
                     msg.Add(MessageTypeEnum.GetStudentsForClass);
                     msg.Add(thisUser.UserId);
-                    msg.Add(selectedClassValue);
+                    msg.Add(ucTeacherMainView1.SelectedClassValue);
 
                     var serializedMsg = JsonSerializer.Serialize(msg);
 
@@ -635,6 +728,7 @@ namespace TeacherManagementSystemClient
                         sw.Flush();
 
                         ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
+                        teacherViewClass1.InvokeExecute(x => x.StudentMark = "");
                         //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
                         //_commandTextbox.Text = String.Empty;
                     }

@@ -12,13 +12,32 @@ namespace TeacherManagementSystemClient
 {
     public partial class TeacherViewClass : UserControl
     {
-        public event ViewStudentMark
+        public event EventHandler ViewStudentMark;
+        public event EventHandler SelectedStudentValueChanged;
+                public event EventHandler SubmitStudentMarkClicked;
 
         public Dictionary<string, string> Students { get; set; }
 
         public string SelectedStudentValue {
             get { return listBoxStudents.SelectedValue.ToString();  }
         }
+
+        public string StudentMark {
+            get { return textBox1StuMark.Text; }
+            set { textBox1StuMark.Text = value; }
+        }
+
+        public void SetTextboxReadonly()
+        {
+            textBox1StuMark.ReadOnly = true;
+        }
+
+        public bool SubmitBtnEnabled { 
+             get { return btnSubmit.Enabled; }
+            set { btnSubmit.Enabled = value; }
+        }
+
+
         public TeacherViewClass()
         {
             InitializeComponent();
@@ -36,7 +55,21 @@ namespace TeacherManagementSystemClient
 
         private void btnView_Click(object sender, EventArgs e)
         {
+            if (this.ViewStudentMark != null) 
+                this.ViewStudentMark(this, new EventArgs());
+        }
 
+        private void listBoxStudents_SelectedValueChanged(object sender, EventArgs e)
+        {
+                        if (this.SelectedStudentValueChanged != null) 
+                this.SelectedStudentValueChanged(this, new EventArgs());
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            
+                if (this.SubmitStudentMarkClicked != null) 
+                this.SubmitStudentMarkClicked(this, new EventArgs());
         }
     }
 }

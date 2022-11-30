@@ -402,14 +402,33 @@ namespace TeacherManagmentSystemServer
                                 
                                     sw.WriteLine(serializedMsg);
                                     sw.Flush();
+
+                                break;
+                            }
+                        case (MessageTypeEnum.GetStudentMark):
+                            {
+                                int studentMark = await _mediator.Send(new GetStudentMarkQuery(Convert.ToInt32(deserializedMsg[2].ToString()), Convert.ToInt32(deserializedMsg[3].ToString())));
+                                //**************
+                                ArrayList msg = new ArrayList();
+                                msg.Add(MessageTypeEnum.GetStudentMark);
+                                msg.Add(studentMark.ToString());
+
+                                var serializedMsg = JsonSerializer.Serialize(msg);
                                 
-                                
-                                
-                                
+                                    sw.WriteLine(serializedMsg);
+                                    sw.Flush();
+
                                 break;
                             }
 
+                        case (MessageTypeEnum.SubmitStudentMark):
+                            {
+                                await _mediator.Send(new SubmitStudentMarkCommand(Convert.ToInt32(deserializedMsg[1].ToString()), Convert.ToInt32(deserializedMsg[2].ToString()), Convert.ToDouble(deserializedMsg[3].ToString())));
 
+                                
+
+                                break;
+                            }
 
 
                         default:

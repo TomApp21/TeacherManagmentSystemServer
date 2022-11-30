@@ -17,8 +17,8 @@ namespace ClassLibrary.DataAccess
             users.Add(new UserModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", IsTeacher = true }); 
             users.Add(new UserModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", IsTeacher = true }) ;
 
-            classes.Add(new ClassModel { ClassId = 1, ClassName = "Maths", TeacherId = 1, StudentId = new List<int>() { 1, 2 } }); // efill whole model out
-            classes.Add(new ClassModel { ClassId = 2, ClassName = "Geography", TeacherId = 1, StudentId = new List<int>() { 1 } });
+            classes.Add(new ClassModel { ClassId = 1, ClassName = "Maths", TeacherId = 1, StudentId = new List<int>() { 1, 2 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } }               }); // efill whole model out
+            classes.Add(new ClassModel { ClassId = 2, ClassName = "Geography", TeacherId = 1, StudentId = new List<int>() { 1 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } } });
 
 
             students.Add(new StudentModel { StudentId = 1, StudentName = "Ewan Giles", ClassIds = new List<int>() { 1, 2 }, });
@@ -81,6 +81,17 @@ namespace ClassLibrary.DataAccess
 
             return c;
         }
+
+        public void InsertStudentMark(int studentId, int classId, double studentMark)
+        {
+            var x = classes.Where(x => x.ClassId == classId).FirstOrDefault();
+            x.Assignments[studentId] = studentMark;
+            
+            //Select(x => x.Assignments).FirstOrDefault();
+            // x[studentId] = studentMark;
+        }
+
+
 
         public void RemoveClass(int classId)
         {

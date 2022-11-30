@@ -30,6 +30,8 @@ namespace ClassLibrary.Enum
             CreateClass,
             GetStudentsForClass,
             ViewTeachersClass,
+            GetStudentMark,
+            SubmitStudentMark
     }
      public enum _MessageTypes
         {

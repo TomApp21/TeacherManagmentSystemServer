@@ -31,7 +31,7 @@
             this.listBoxStudents = new System.Windows.Forms.ListBox();
             this.labelStudents = new System.Windows.Forms.Label();
             this.lblStudentMark = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1StuMark = new System.Windows.Forms.TextBox();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -44,6 +44,7 @@
             this.listBoxStudents.Name = "listBoxStudents";
             this.listBoxStudents.Size = new System.Drawing.Size(192, 214);
             this.listBoxStudents.TabIndex = 0;
+            this.listBoxStudents.SelectedValueChanged += new System.EventHandler(this.listBoxStudents_SelectedValueChanged);
             // 
             // labelStudents
             // 
@@ -63,12 +64,12 @@
             this.lblStudentMark.TabIndex = 2;
             this.lblStudentMark.Text = "Assignment Mark";
             // 
-            // textBox1
+            // textBox1StuMark
             // 
-            this.textBox1.Location = new System.Drawing.Point(399, 55);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 23);
-            this.textBox1.TabIndex = 3;
+            this.textBox1StuMark.Location = new System.Drawing.Point(399, 55);
+            this.textBox1StuMark.Name = "textBox1StuMark";
+            this.textBox1StuMark.Size = new System.Drawing.Size(100, 23);
+            this.textBox1StuMark.TabIndex = 3;
             // 
             // btnSubmit
             // 
@@ -78,6 +79,7 @@
             this.btnSubmit.TabIndex = 4;
             this.btnSubmit.Text = "Submit";
             this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // btnView
             // 
@@ -95,7 +97,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnSubmit);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBox1StuMark);
             this.Controls.Add(this.lblStudentMark);
             this.Controls.Add(this.labelStudents);
             this.Controls.Add(this.listBoxStudents);
@@ -111,7 +113,7 @@
         private ListBox listBoxStudents;
         private Label labelStudents;
         private Label lblStudentMark;
-        private TextBox textBox1;
+        private TextBox textBox1StuMark;
         private Button btnSubmit;
         private Button btnView;
     }
