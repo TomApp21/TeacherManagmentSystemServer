@@ -21,5 +21,10 @@ namespace ClassLibrary.Models
 
         public MessageTypeEnum messageType { get;set; }
 
+
+        public int NumStudents
+        {
+            get { return StudentId.Count; }
+        }
     }
 }

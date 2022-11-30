@@ -31,13 +31,15 @@
             this.listboxTeacherClasses = new System.Windows.Forms.ListBox();
             this.lblClasses = new System.Windows.Forms.Label();
             this.btnSortName = new System.Windows.Forms.Button();
-            this.btnSortNo = new System.Windows.Forms.Button();
+            this.btnSortNoAsc = new System.Windows.Forms.Button();
             this.btnViewClass = new System.Windows.Forms.Button();
             this.btnCreate = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
             this.listboxBroadcastMsg = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.lblBroadcast = new System.Windows.Forms.Label();
+            this.btnSortNoDesc = new System.Windows.Forms.Button();
+            this.btnSortNameDesc = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listboxTeacherClasses
@@ -62,20 +64,21 @@
             // 
             this.btnSortName.Location = new System.Drawing.Point(22, 381);
             this.btnSortName.Name = "btnSortName";
-            this.btnSortName.Size = new System.Drawing.Size(92, 23);
+            this.btnSortName.Size = new System.Drawing.Size(111, 23);
             this.btnSortName.TabIndex = 2;
-            this.btnSortName.Text = "Sort By Name";
+            this.btnSortName.Text = "Sort By Name >";
             this.btnSortName.UseVisualStyleBackColor = true;
             this.btnSortName.Click += new System.EventHandler(this.btnSortName_Click);
             // 
-            // btnSortNo
+            // btnSortNoAsc
             // 
-            this.btnSortNo.Location = new System.Drawing.Point(139, 381);
-            this.btnSortNo.Name = "btnSortNo";
-            this.btnSortNo.Size = new System.Drawing.Size(133, 23);
-            this.btnSortNo.TabIndex = 3;
-            this.btnSortNo.Text = "Sort By # Students";
-            this.btnSortNo.UseVisualStyleBackColor = true;
+            this.btnSortNoAsc.Location = new System.Drawing.Point(139, 381);
+            this.btnSortNoAsc.Name = "btnSortNoAsc";
+            this.btnSortNoAsc.Size = new System.Drawing.Size(133, 23);
+            this.btnSortNoAsc.TabIndex = 3;
+            this.btnSortNoAsc.Text = "Sort By # Students >";
+            this.btnSortNoAsc.UseVisualStyleBackColor = true;
+            this.btnSortNoAsc.Click += new System.EventHandler(this.btnSortNo_Click);
             // 
             // btnViewClass
             // 
@@ -131,17 +134,39 @@
             this.lblBroadcast.TabIndex = 9;
             this.lblBroadcast.Text = "Send Message to Selected Classes";
             // 
+            // btnSortNoDesc
+            // 
+            this.btnSortNoDesc.Location = new System.Drawing.Point(139, 410);
+            this.btnSortNoDesc.Name = "btnSortNoDesc";
+            this.btnSortNoDesc.Size = new System.Drawing.Size(133, 23);
+            this.btnSortNoDesc.TabIndex = 10;
+            this.btnSortNoDesc.Text = "Sort By # Students <";
+            this.btnSortNoDesc.UseVisualStyleBackColor = true;
+            this.btnSortNoDesc.Click += new System.EventHandler(this.btnSortNoDesc_Click);
+            // 
+            // btnSortNameDesc
+            // 
+            this.btnSortNameDesc.Location = new System.Drawing.Point(22, 410);
+            this.btnSortNameDesc.Name = "btnSortNameDesc";
+            this.btnSortNameDesc.Size = new System.Drawing.Size(111, 23);
+            this.btnSortNameDesc.TabIndex = 11;
+            this.btnSortNameDesc.Text = "Sort By Name <";
+            this.btnSortNameDesc.UseVisualStyleBackColor = true;
+            this.btnSortNameDesc.Click += new System.EventHandler(this.btnSortNameDesc_Click);
+            // 
             // ucTeacherMainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnSortNameDesc);
+            this.Controls.Add(this.btnSortNoDesc);
             this.Controls.Add(this.lblBroadcast);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listboxBroadcastMsg);
             this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.btnCreate);
             this.Controls.Add(this.btnViewClass);
-            this.Controls.Add(this.btnSortNo);
+            this.Controls.Add(this.btnSortNoAsc);
             this.Controls.Add(this.btnSortName);
             this.Controls.Add(this.lblClasses);
             this.Controls.Add(this.listboxTeacherClasses);
@@ -157,13 +182,15 @@
         private ListBox listboxTeacherClasses;
         private Label lblClasses;
         private Button btnSortName;
-        private Button btnSortNo;
+        private Button btnSortNoAsc;
         private Button btnViewClass;
         private Button btnCreate;
         private Button btnDelete;
         private ListBox listboxBroadcastMsg;
         private Button button1;
         private Label lblBroadcast;
+        private Button btnSortNoDesc;
+        private Button btnSortNameDesc;
     }
 
 

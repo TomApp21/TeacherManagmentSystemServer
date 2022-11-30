@@ -50,7 +50,9 @@ namespace TeacherManagementSystemClient
             //_sendCommandBtn.Enabled = false;
 
             this.ucLogin1.LoginClicked += new EventHandler(LoginEventHandler_LoginClicked);
-            this.ucTeacherMainView1.SortByNameClicked += new EventHandler(LoginEventHandler_LoginClicked);
+            this.ucTeacherMainView1.SortByNumberStudentsClicked += new EventHandler(SortByNumStudentsAsc_SortByNumStudentsClicked);
+            this.ucTeacherMainView1.SortByNumberStudentsDescClicked += new EventHandler(SortByNumStudentsDesc_SortByNumStudentsClicked);
+
 
             
         }
@@ -196,33 +198,25 @@ namespace TeacherManagementSystemClient
                                     teachersClasses = dic2;
 
                                     PopulateTeacherClassesListbox();
-              
+                                   break;
+                                }
+                                case (MessageTypeEnum.GetClassesOrderedByStudents) :
+                                {
+
+                                    List<ClassModel> teachersClassesModel = new List<ClassModel>();
+                                    Dictionary<int, string> classes = new Dictionary<int, string>();
+
+                                    String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
+                                    String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
+
+
+                                    var dic2 = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
                                     
+                                    // Add to local store
+                                    // ------------------
+                                    teachersClasses = dic2;
 
-
-
-
-
-
-
-
-
-
-                                    //teachers
-
-                                    //userModel.UserName = deserializedMsg[1].ToString();
-                                    //userModel.Password = deserializedMsg[2].ToString();
-                                    //userModel.UserId = Convert.ToInt32(deserializedMsg[3].ToString());
-                                    //userModel.Name = deserializedMsg[4].ToString();
-                                    //userModel.IsTeacher = Convert.ToBoolean(deserializedMsg[5].ToString());
-
-                                    //thisUser = userModel;
-
-                                    // show logout button
-
-
-                                    //sw.WriteLine(input);
-                                    //sw.Flush();
+                                    PopulateTeacherClassesListbox();
                                    break;
                                 }
 
@@ -368,7 +362,7 @@ namespace TeacherManagementSystemClient
             }
         }
 
-        public void SortClassesName_SortByNameClicked(object sender, EventArgs e)
+        public void SortByNumStudentsAsc_SortByNumStudentsClicked(object sender, EventArgs e)
         {
             try
             {
@@ -377,12 +371,39 @@ namespace TeacherManagementSystemClient
                     StreamWriter sw = new StreamWriter(_client.GetStream());
 
                     ArrayList msg = new ArrayList();
-                    msg.Add(MessageTypeEnum.UserLoginRequestResponse);
-                    msg.Add(ucLogin1.Username);
-                    msg.Add(ucLogin1.Password);
+                    msg.Add(MessageTypeEnum.GetClassesOrderedByStudents);
+                    msg.Add(thisUser.UserId);
+                    msg.Add("true");
 
                     var serializedMsg = JsonSerializer.Serialize(msg);
 
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+        public void SortByNumStudentsDesc_SortByNumStudentsClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetClassesOrderedByStudents);
+                    msg.Add(thisUser.UserId);
+                    msg.Add("false");
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
 
                     sw.WriteLine(serializedMsg);
                     sw.Flush();

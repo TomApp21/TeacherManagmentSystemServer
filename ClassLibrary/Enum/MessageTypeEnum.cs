@@ -15,6 +15,7 @@ namespace ClassLibrary.Enum
             GetUserNotifications, // Get a list of notification for the dashboard. Requieres[User id]
             GetUserList, // Get a list of all users known to the system
             GetClassesList, // Get a list of all classes known to the database
+            GetClassesOrderedByStudents, // gets ordered classes list
             BroadcastNotification, // Chat messages have been update as a class has ended
             SendUserIdForServer, // Sends the user id to the server to tie the user to the connected client
             GetClassForPopup, // Get all the details needed for the class popup

@@ -377,6 +377,43 @@ namespace TeacherManagmentSystemServer
                             sw.Flush();
                             break;
                         }
+                        case (MessageTypeEnum.GetClassesOrderedByStudents) :
+                            {
+
+                                List<ClassModel> teachersClasses = await _mediator.Send(new GetSortedClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString()),Convert.ToBoolean(deserializedMsg[2].ToString())));
+
+                                ArrayList msg = new ArrayList();
+
+                                string classIds = String.Empty;
+                                string classNames = String.Empty;
+
+                                // build up string to serialize
+                                // ----------------------------
+                                foreach (var classy in teachersClasses)
+                                {
+                                    classIds += classy.ClassId.ToString() + ",";
+                                    classNames += classy.ClassName.ToString() + ",";
+                                }
+
+                                // Remove comma from last char
+                                //----------------------------------------
+                                classIds = classIds.Substring(0, classIds.Length - 1);
+                                classNames = classNames.Substring(0, classNames.Length - 1);
+
+                                msg.Add(MessageTypeEnum.GetClassesOrderedByStudents);
+                                msg.Add(classIds);
+                                msg.Add(classNames);
+
+
+                                var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                                sw.WriteLine(serializedMsg);
+                                sw.Flush();
+                                break;
+                            }
+
+
 
 
 

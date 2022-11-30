@@ -12,7 +12,9 @@ namespace TeacherManagementSystemClient
 {
     public partial class ucTeacherMainView : UserControl
     {
-                        public event EventHandler SortByNameClicked;
+                        public event EventHandler SortByNumberStudentsClicked;
+                        public event EventHandler SortByNumberStudentsDescClicked;
+
 
         public ucTeacherMainView()
         {
@@ -44,12 +46,29 @@ namespace TeacherManagementSystemClient
 
             TeachersClasses = ascendingDic;
             UpdateDataSource();
-
-
-
-            //listboxTeacherClasses.Sorted = true;
-                //     if (this.SortByNameClicked != null) 
-                //this.SortByNameClicked(this, new EventArgs());
         }
+
+        private void btnSortNameDesc_Click(object sender, EventArgs e)
+        {
+            var descendingDic = TeachersClasses.OrderByDescending(pair => pair.Value).Take(10)
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            TeachersClasses = descendingDic;
+            UpdateDataSource();
+        }
+
+        private void btnSortNo_Click(object sender, EventArgs e)
+        {
+            if (this.SortByNumberStudentsClicked != null)
+                this.SortByNumberStudentsClicked(this, new EventArgs());
+        }
+
+        private void btnSortNoDesc_Click(object sender, EventArgs e)
+        {
+                        if (this.SortByNumberStudentsDescClicked != null)
+                this.SortByNumberStudentsDescClicked(this, new EventArgs());
+        }
+
+
     }
 }
