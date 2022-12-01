@@ -17,12 +17,19 @@ namespace ClassLibrary.DataAccess
             users.Add(new UserModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", IsTeacher = true }); 
             users.Add(new UserModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", IsTeacher = true }) ;
 
+            users.Add(new UserModel { UserId = 3, Name = "Sherrie Morris", UserName = "sm", Password = "P4ssw0rd.!", IsTeacher = false }) ;
+
+
             classes.Add(new ClassModel { ClassId = 1, ClassName = "Maths", TeacherId = 1, StudentId = new List<int>() { 1, 2 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } }               }); // efill whole model out
             classes.Add(new ClassModel { ClassId = 2, ClassName = "Geography", TeacherId = 1, StudentId = new List<int>() { 1 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } } });
+            classes.Add(new ClassModel { ClassId = 3, ClassName = "English", TeacherId = 2, StudentId = new List<int>() { 3 }, Assignments = new Dictionary<int, double> { {  2, 0 } } });
+
 
 
             students.Add(new StudentModel { StudentId = 1, StudentName = "Ewan Giles", ClassIds = new List<int>() { 1, 2 }, });
             students.Add(new StudentModel { StudentId = 2, StudentName = "Tom Appleyard", ClassIds = new List<int>() { 1 }, });
+            students.Add(new StudentModel { StudentId = 3, StudentName = "Saz Shelton", ClassIds = new List<int>() { 3 }, ParentId = 3 });
+
 
 
         }

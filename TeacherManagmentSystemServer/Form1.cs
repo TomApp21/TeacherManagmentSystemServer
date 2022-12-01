@@ -355,7 +355,7 @@ namespace TeacherManagmentSystemServer
 
                             List<ClassModel> teachersClasses =  await _mediator.Send(new GetClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
 
-                            var serializedMsg = UpdateDataSource(teachersClasses);
+                            var serializedMsg = UpdateDataSource(teachersClasses, false);
 
                             sw.WriteLine(serializedMsg);
                             sw.Flush();
@@ -366,7 +366,7 @@ namespace TeacherManagmentSystemServer
 
                                 List<ClassModel> teachersClasses = await _mediator.Send(new GetSortedClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString()),Convert.ToBoolean(deserializedMsg[2].ToString())));
 
-                                    var serializedMsg = UpdateDataSource(teachersClasses);
+                                    var serializedMsg = UpdateDataSource(teachersClasses, false);
                                     sw.WriteLine(serializedMsg);
                                     sw.Flush();
 
@@ -387,7 +387,7 @@ namespace TeacherManagmentSystemServer
                                 // ------------------
                                 List<ClassModel> teachersClasses =  await _mediator.Send(new GetClassesByTeacherIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
 
-                                    var serializedMsg = UpdateDataSource(teachersClasses);
+                                    var serializedMsg = UpdateDataSource(teachersClasses, false);
                                     sw.WriteLine(serializedMsg);
                                     sw.Flush();
                                 
@@ -429,6 +429,19 @@ namespace TeacherManagmentSystemServer
 
                                 break;
                             }
+                        case (MessageTypeEnum.GetParentsClasses):
+                            {
+                                List<ClassModel> parentsClasses = await _mediator.Send(new GetClassesByParentIdQuery(Convert.ToInt32(deserializedMsg[1].ToString())));
+
+                                var serializedMsg = UpdateDataSource(parentsClasses, true);
+
+                                sw.WriteLine(serializedMsg);
+                                sw.Flush();
+                                
+
+                                break;
+                            }
+
 
 
                         default:
@@ -462,7 +475,7 @@ namespace TeacherManagmentSystemServer
 
         #endregion
 
-        private string UpdateDataSource(List<ClassModel> teachersClasses)
+        private string UpdateDataSource(List<ClassModel> teachersClasses, bool isParent)
         {
 
             ArrayList msg = new ArrayList();
@@ -488,8 +501,12 @@ namespace TeacherManagmentSystemServer
             }
 
 
-
-            msg.Add(MessageTypeEnum.GetClassesList);
+            if (!isParent) 
+                msg.Add(MessageTypeEnum.GetClassesList);
+            else
+            {
+                msg.Add(MessageTypeEnum.GetParentsClasses);
+            }
             msg.Add(classIds);
             msg.Add(classNames);
 

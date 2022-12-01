@@ -37,6 +37,7 @@
             this.ucLogin1 = new TeacherManagementSystemClient.ucLogin();
             this.ucTeacherMainView1 = new TeacherManagementSystemClient.ucTeacherMainView();
             this.teacherViewClass1 = new TeacherManagementSystemClient.TeacherViewClass();
+            this.ucParentMainView1 = new TeacherManagementSystemClient.ucParentMainView();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -127,14 +128,24 @@
             this.teacherViewClass1.Location = new System.Drawing.Point(188, 12);
             this.teacherViewClass1.Name = "teacherViewClass1";
             this.teacherViewClass1.Size = new System.Drawing.Size(600, 450);
+            this.teacherViewClass1.StudentMark = "";
             this.teacherViewClass1.Students = null;
+            this.teacherViewClass1.SubmitBtnEnabled = true;
             this.teacherViewClass1.TabIndex = 6;
+            // 
+            // ucParentMainView1
+            // 
+            this.ucParentMainView1.Location = new System.Drawing.Point(206, 3);
+            this.ucParentMainView1.Name = "ucParentMainView1";
+            this.ucParentMainView1.Size = new System.Drawing.Size(600, 450);
+            this.ucParentMainView1.TabIndex = 7;
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ucParentMainView1);
             this.Controls.Add(this.teacherViewClass1);
             this.Controls.Add(this.ucTeacherMainView1);
             this.Controls.Add(this.ucLogin1);
@@ -159,5 +170,6 @@
         private ucTeacherMainView ucTeacherMainView1;
         private Button btnHome;
         private TeacherViewClass teacherViewClass1;
+        private ucParentMainView ucParentMainView1;
     }
 }

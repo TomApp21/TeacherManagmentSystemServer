@@ -192,10 +192,23 @@ namespace TeacherManagementSystemClient
 
                                     // show logout button
                                     btnLogout.Enabled = true;
-                                    ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
-                                    ucTeacherMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
 
-                                    GetTeacherClasses();
+                                    if (thisUser.IsTeacher)
+                                    {
+                                        ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
+                                        ucTeacherMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+                                        GetTeacherClasses();
+                                    }
+                                    else
+                                    {
+                                        ucParentMainView1.InvokeExecute(x => x.BringToFront());
+                                        ucParentMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+                                        GetParentsClasses();
+                                    }
+
+          
 
                                     //sw.WriteLine(input);
                                     //sw.Flush();
@@ -256,12 +269,21 @@ namespace TeacherManagementSystemClient
 
                                     break;
                                 }
-                            //case (MessageTypeEnum.SubmitStudentMark):
-                            //    {
-                            //        teacherViewClass1.InvokeExecute(x => x.StudentMark = deserializedMsg[1].ToString());
+                            case (MessageTypeEnum.GetParentsClasses):
+                                {
+                                    ucParentMainView1.InvokeExecute(x => x.BringToFront());
+                                    ucParentMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
+                                    
 
-                            //        break;
-                            //    }
+                                    String[] strClassIdList = deserializedMsg[1].ToString().Split(',');
+                                    String[] strClassNameList = deserializedMsg[2].ToString().Split(',');
+
+                                    var dic = strClassIdList.Zip(strClassNameList).ToDictionary(x => x.First, x => x.Second);
+
+                                    PopulateParentClassListbox(dic);
+                                    break;
+                                }
+                                
 
 
 
@@ -338,6 +360,37 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
+
+        
+        public void GetParentsClasses()
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetParentsClasses);
+                    msg.Add(thisUser.UserId);
+
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+        
 
 
 
@@ -698,6 +751,25 @@ namespace TeacherManagementSystemClient
             teacherViewClass1.InvokeExecute(x => x.UpdateDataSource());
         }
 
+                        /// <summary>
+        /// Updates datasource on user control.
+        /// </summary>
+        private void PopulateParentClassListbox(Dictionary<string, string> theseClasses)
+        {
+
+            //if (theseStudents.ContainsKey(String.Empty))
+            //{
+            //    theseStudents.Remove(String.Empty);
+            //    ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = false);
+            //}
+            //else
+            //{
+            //    ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
+            //}
+
+            ucParentMainView1.InvokeExecute(x => x.Classes = theseClasses);
+            ucParentMainView1.InvokeExecute(x => x.UpdateDataSource());
+        }
 
         #endregion
 
