@@ -33,6 +33,8 @@ namespace ClassLibrary.Enum
             SubmitStudentMark,
         GetParentsClasses,
         GetClassesList, // Get a list of all classes known to the database
+        GetParentClassMark,
+        JoinClass
 
     }
      public enum _MessageTypes

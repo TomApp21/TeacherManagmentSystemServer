@@ -39,6 +39,11 @@ namespace TeacherManagementSystemClient
             set { textboxModuleCode.Text = value;}
         }
 
+        public string SetUserName
+        {
+            set { labelusername.Text = value;}
+        }
+
         #endregion
 
 

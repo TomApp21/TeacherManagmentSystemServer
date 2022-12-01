@@ -17,18 +17,22 @@ namespace ClassLibrary.DataAccess
             users.Add(new UserModel { UserId = 1, Name = "Stephen Wales", UserName = "stephenWales", Password = "P4ssw0rd.!", IsTeacher = true }); 
             users.Add(new UserModel { UserId = 2, Name = "Ian Giles", UserName = "ianGiles", Password = "P4ssw0rd.!", IsTeacher = true }) ;
 
-            users.Add(new UserModel { UserId = 3, Name = "Sherrie Morris", UserName = "sm", Password = "P4ssw0rd.!", IsTeacher = false }) ;
-
-
-            classes.Add(new ClassModel { ClassId = 1, ClassName = "Maths", TeacherId = 1, StudentId = new List<int>() { 1, 2 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } }               }); // efill whole model out
-            classes.Add(new ClassModel { ClassId = 2, ClassName = "Geography", TeacherId = 1, StudentId = new List<int>() { 1 }, Assignments = new Dictionary<int, double> { { 1, 0 }, { 2, 0 } } });
-            classes.Add(new ClassModel { ClassId = 3, ClassName = "English", TeacherId = 2, StudentId = new List<int>() { 3 }, Assignments = new Dictionary<int, double> { {  2, 0 } } });
+            users.Add(new UserModel { UserId = 3, Name = "Sherrie Morris", UserName = "sherrieMorris", Password = "P4ssw0rd.!", IsTeacher = false }) ;
+            users.Add(new UserModel { UserId = 4, Name = "Clare Shelton", UserName = "clareShelton", Password = "P4ssw0rd.!", IsTeacher = false }) ;
+            users.Add(new UserModel { UserId = 5, Name = "Tracy Giles", UserName = "tracyGiles", Password = "P4ssw0rd.!", IsTeacher = false }) ;
 
 
 
-            students.Add(new StudentModel { StudentId = 1, StudentName = "Ewan Giles", ClassIds = new List<int>() { 1, 2 }, });
-            students.Add(new StudentModel { StudentId = 2, StudentName = "Tom Appleyard", ClassIds = new List<int>() { 1 }, });
-            students.Add(new StudentModel { StudentId = 3, StudentName = "Saz Shelton", ClassIds = new List<int>() { 3 }, ParentId = 3 });
+
+            classes.Add(new ClassModel { ClassId = 1, ModuleCode = "1234", ClassName = "Maths", TeacherId = 1, StudentId = new List<int>() { 1, 2, 3 }, Assignments = new Dictionary<int, double> { { 1, 2 }, { 2, 3 }, { 3, 5 } }               }); // efill whole model out
+            classes.Add(new ClassModel { ClassId = 2, ModuleCode = "2345", ClassName = "Geography", TeacherId = 1, StudentId = new List<int>() { 1, 2, 3 }, Assignments = new Dictionary<int, double> { { 1, 4 }, { 2, 0 }, {3,2 } } });
+            classes.Add(new ClassModel { ClassId = 3, ModuleCode = "3456", ClassName = "English", TeacherId = 2, StudentId = new List<int>() { 1 }, Assignments = new Dictionary<int, double> { {  2, 0 } } });
+
+
+
+            students.Add(new StudentModel { StudentId = 1, StudentName = "Ewan Giles", ClassIds = new List<int>() { 1, 2 }, ParentId = 5 });
+            students.Add(new StudentModel { StudentId = 2, StudentName = "Tom Appleyard", ClassIds = new List<int>() { 1, 2 }, ParentId = 3 });
+            students.Add(new StudentModel { StudentId = 3, StudentName = "Saz Shelton", ClassIds = new List<int>() { 1 }, ParentId = 4 });
 
 
 
@@ -63,12 +67,7 @@ namespace ClassLibrary.DataAccess
             return students;
         }
 
-        public List<ClassModel> InsertStudentToClass(string moduleCode, int classId, StudentModel student )
-        {
-            // WRONG***
-            return classes;
 
-        }
 
 
         public ClassModel InsertClass(string className, DateTime startDate, DateTime endDate, int teacherId,  string moduleCode, List<int> studentIds, Dictionary<int, double> assignmentScores)
@@ -92,18 +91,56 @@ namespace ClassLibrary.DataAccess
         public void InsertStudentMark(int studentId, int classId, double studentMark)
         {
             var x = classes.Where(x => x.ClassId == classId).FirstOrDefault();
-            x.Assignments[studentId] = studentMark;
+            if (x.Assignments.ContainsKey(studentId))
+            {
+                 x.Assignments[studentId] = studentMark;
+            }           
+            else
+            {
+                x.Assignments.Add(studentId, studentMark);
+            }
+
             
             //Select(x => x.Assignments).FirstOrDefault();
             // x[studentId] = studentMark;
         }
 
+        public bool InsertStudentToClass(int parentId, string moduleCode)
+        {
+            bool blnSuccess = false;
+
+            var c = classes.Where(x => x.ModuleCode == moduleCode).FirstOrDefault();
+
+            if (c != null)
+            {
+                var s = students.Where(x => x.ParentId == parentId).FirstOrDefault();
+                c.StudentId.Add(s.StudentId);
+                c.Assignments.Add(s.StudentId, 0);
+                s.ClassIds.Add(c.ClassId);
+                blnSuccess = true;
+            }
+
+            return blnSuccess;
+
+
+            
+        }
 
 
         public void RemoveClass(int classId)
         {
             ClassModel c = (ClassModel)classes.Where(x => x.ClassId == classId).FirstOrDefault();
             classes.Remove(c);
+
+            foreach (var student in students)
+            {
+                if (student.ClassIds.Contains(classId))
+                {
+                    student.ClassIds.Remove(classId);
+                }
+            }
+
+
 
             // remove CLASS FROM ALL STUDENTS?
 

@@ -27,6 +27,7 @@ namespace TeacherManagementSystemClient
             set { textBox1StuMark.Text = value; }
         }
 
+
         public void SetTextboxReadonly()
         {
             textBox1StuMark.ReadOnly = true;
@@ -37,6 +38,21 @@ namespace TeacherManagementSystemClient
             set { btnSubmit.Enabled = value; }
         }
 
+                public string SetUserName
+        {
+            set { lblUsername.Text = value;}
+        }
+        public bool ViewStudentEnabled
+        {
+            get
+            {
+                return btnView.Enabled;
+            }
+            set
+            {
+                btnView.Enabled = value;
+            }
+        }
 
         public TeacherViewClass()
         {
@@ -50,6 +66,16 @@ namespace TeacherManagementSystemClient
 
             listBoxStudents.DisplayMember = "Value";
             listBoxStudents.ValueMember = "Key";
+
+            if (Students.Count == 0)
+            {
+                ViewStudentEnabled = false;
+            }
+            else
+            {
+                ViewStudentEnabled = true;
+            }
+
 
         }
 

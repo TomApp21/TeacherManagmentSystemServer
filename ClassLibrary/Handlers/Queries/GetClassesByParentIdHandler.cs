@@ -22,10 +22,18 @@ namespace ClassLibrary.Handlers.Queries
         // add error handling
         public async Task<List<ClassModel>> Handle(GetClassesByParentIdQuery request, CancellationToken cancellationToken)
         {
-            var results = await _mediator.Send(new GetClassListQuery());
-            var output = (List<ClassModel>)results.Where(x => x.ClassId == request.Id).ToList();  // WRONG! Any());
+            var results = await _mediator.Send(new GetStudentListQuery());
+            var output = (List<int>)results.Where(x => x.ParentId == request.Id).Select(y => y.ClassIds).SingleOrDefault();
 
-            return output;
+            List<ClassModel> allClasses = await _mediator.Send(new GetClassListQuery());
+            List<ClassModel> thisStudentsClasses = new List<ClassModel>();
+
+            foreach (var item in output)
+            {
+                thisStudentsClasses.Add(allClasses.Where(x => x.ClassId == item).SingleOrDefault());
+            }
+
+            return thisStudentsClasses;
 
         }
     }

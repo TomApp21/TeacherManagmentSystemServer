@@ -407,7 +407,7 @@ namespace TeacherManagmentSystemServer
                             }
                         case (MessageTypeEnum.GetStudentMark):
                             {
-                                int studentMark = await _mediator.Send(new GetStudentMarkQuery(Convert.ToInt32(deserializedMsg[2].ToString()), Convert.ToInt32(deserializedMsg[3].ToString())));
+                                int studentMark = await _mediator.Send(new GetStudentMarkQuery(Convert.ToInt32(deserializedMsg[2].ToString()), Convert.ToInt32(deserializedMsg[3].ToString()))); // GetStudentMarkForParentQuery(Convert.ToInt32(deserializedMsg[1].ToString()), Convert.ToInt32(deserializedMsg[2].ToString())));
                                 //**************
                                 ArrayList msg = new ArrayList();
                                 msg.Add(MessageTypeEnum.GetStudentMark);
@@ -441,7 +441,38 @@ namespace TeacherManagmentSystemServer
 
                                 break;
                             }
+                        case (MessageTypeEnum.GetParentClassMark):
+                            {
+                                int studentClassMark = await _mediator.Send(new GetStudentMarkForParentQuery(Convert.ToInt32(deserializedMsg[1].ToString()), Convert.ToInt32(deserializedMsg[2].ToString())) );
 
+                                ArrayList msg = new ArrayList();
+                                msg.Add(MessageTypeEnum.GetParentClassMark);
+                                msg.Add(studentClassMark.ToString());
+
+                                var serializedMsg = JsonSerializer.Serialize(msg);
+                                
+                                sw.WriteLine(serializedMsg);
+                                sw.Flush();
+                                
+
+                                break;
+                            }
+                            case (MessageTypeEnum.JoinClass):
+                            {
+                                var blnSuccess = await _mediator.Send(new InsertStudentToClassCommand(Convert.ToInt32(deserializedMsg[1].ToString()), deserializedMsg[2].ToString()));
+
+                                ArrayList msg = new ArrayList();
+                                msg.Add(MessageTypeEnum.JoinClass);
+                                msg.Add(blnSuccess.ToString());
+
+                                var serializedMsg = JsonSerializer.Serialize(msg);
+                                
+                                sw.WriteLine(serializedMsg);
+                                sw.Flush();
+                                
+
+                                break;
+                            }
 
 
                         default:

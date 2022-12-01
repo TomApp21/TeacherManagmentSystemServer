@@ -17,7 +17,7 @@ namespace ClassLibrary.Commands
 
 
 
-        public SubmitStudentMarkCommand(int classId, int studentId, double studentMark)
+        public SubmitStudentMarkCommand(int studentId, int classId, double studentMark)
         {
             ClassId = classId;
             StudentId = studentId;

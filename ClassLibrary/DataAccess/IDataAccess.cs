@@ -17,5 +17,8 @@ namespace ClassLibrary.DataAccess
         void RemoveClass(int classId);
 
         void InsertStudentMark(int studentId, int classId, double studentMark);
+
+        bool InsertStudentToClass(int studentId, string moduleCode);
+
     }
 }

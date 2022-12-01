@@ -34,6 +34,7 @@
             this.textBox1StuMark = new System.Windows.Forms.TextBox();
             this.btnSubmit = new System.Windows.Forms.Button();
             this.btnView = new System.Windows.Forms.Button();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listBoxStudents
@@ -91,10 +92,19 @@
             this.btnView.UseVisualStyleBackColor = true;
             this.btnView.Click += new System.EventHandler(this.btnView_Click);
             // 
+            // lblUsername
+            // 
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(3, 0);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(0, 15);
+            this.lblUsername.TabIndex = 6;
+            // 
             // TeacherViewClass
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.btnView);
             this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.textBox1StuMark);
@@ -116,5 +126,6 @@
         private TextBox textBox1StuMark;
         private Button btnSubmit;
         private Button btnView;
+        private Label lblUsername;
     }
 }

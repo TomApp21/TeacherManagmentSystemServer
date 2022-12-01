@@ -36,8 +36,10 @@
             this.textBox2ClassesBroadcastMsgBox = new System.Windows.Forms.TextBox();
             this.labelClassBroadcastMsg = new System.Windows.Forms.Label();
             this.lblClassMark = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBoxMark = new System.Windows.Forms.TextBox();
             this.listBox1ParentsClasses = new System.Windows.Forms.ListBox();
+            this.labelInvalid = new System.Windows.Forms.Label();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblClasses
@@ -73,6 +75,7 @@
             this.btnJoinClass.TabIndex = 4;
             this.btnJoinClass.Text = "Join";
             this.btnJoinClass.UseVisualStyleBackColor = true;
+            this.btnJoinClass.Click += new System.EventHandler(this.btnJoinClass_Click);
             // 
             // btnViewClass
             // 
@@ -82,6 +85,7 @@
             this.btnViewClass.TabIndex = 5;
             this.btnViewClass.Text = "View";
             this.btnViewClass.UseVisualStyleBackColor = true;
+            this.btnViewClass.Click += new System.EventHandler(this.btnViewClass_Click);
             // 
             // textBox2ClassesBroadcastMsgBox
             // 
@@ -110,13 +114,13 @@
             this.lblClassMark.TabIndex = 8;
             this.lblClassMark.Text = "Mark";
             // 
-            // textBox2
+            // textBoxMark
             // 
-            this.textBox2.Location = new System.Drawing.Point(151, 227);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 23);
-            this.textBox2.TabIndex = 9;
+            this.textBoxMark.Location = new System.Drawing.Point(151, 227);
+            this.textBoxMark.Name = "textBoxMark";
+            this.textBoxMark.ReadOnly = true;
+            this.textBoxMark.Size = new System.Drawing.Size(100, 23);
+            this.textBoxMark.TabIndex = 9;
             // 
             // listBox1ParentsClasses
             // 
@@ -126,13 +130,34 @@
             this.listBox1ParentsClasses.Name = "listBox1ParentsClasses";
             this.listBox1ParentsClasses.Size = new System.Drawing.Size(200, 109);
             this.listBox1ParentsClasses.TabIndex = 10;
+            this.listBox1ParentsClasses.SelectedValueChanged += new System.EventHandler(this.listBox1ParentsClasses_SelectedValueChanged);
+            // 
+            // labelInvalid
+            // 
+            this.labelInvalid.AutoSize = true;
+            this.labelInvalid.Location = new System.Drawing.Point(297, 135);
+            this.labelInvalid.Name = "labelInvalid";
+            this.labelInvalid.Size = new System.Drawing.Size(73, 15);
+            this.labelInvalid.TabIndex = 11;
+            this.labelInvalid.Text = "Invalid Code";
+            this.labelInvalid.Visible = false;
+            // 
+            // lblUsername
+            // 
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(3, 0);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(0, 15);
+            this.lblUsername.TabIndex = 12;
             // 
             // ucParentMainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblUsername);
+            this.Controls.Add(this.labelInvalid);
             this.Controls.Add(this.listBox1ParentsClasses);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBoxMark);
             this.Controls.Add(this.lblClassMark);
             this.Controls.Add(this.labelClassBroadcastMsg);
             this.Controls.Add(this.textBox2ClassesBroadcastMsgBox);
@@ -157,7 +182,9 @@
         private TextBox textBox2ClassesBroadcastMsgBox;
         private Label labelClassBroadcastMsg;
         private Label lblClassMark;
-        private TextBox textBox2;
+        private TextBox textBoxMark;
         private ListBox listBox1ParentsClasses;
+        private Label labelInvalid;
+        private Label lblUsername;
     }
 }

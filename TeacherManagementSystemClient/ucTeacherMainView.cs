@@ -37,6 +37,11 @@ namespace TeacherManagementSystemClient
             get { return listboxTeacherClasses.SelectedValue.ToString();  }
         }
 
+        public string SetUserName
+        {
+            set { lblUsername.Text = value;}
+        }
+
 
         public void UpdateDataSource()
         {
@@ -107,6 +112,12 @@ namespace TeacherManagementSystemClient
         {
                      if (this.ViewClassClicked != null)
                 this.ViewClassClicked(this, new EventArgs());
+        }
+
+        // Send Me
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

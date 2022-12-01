@@ -29,8 +29,9 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this._statusTextbox = new System.Windows.Forms.TextBox();
+            this.lblUser = new System.Windows.Forms.Label();
             this.btnHome = new System.Windows.Forms.Button();
-            this.btnLogout = new System.Windows.Forms.Button();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.userControl31 = new TeacherManagementSystemClient.UserControl3();
@@ -43,8 +44,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this._statusTextbox);
+            this.panel1.Controls.Add(this.lblUser);
             this.panel1.Controls.Add(this.btnHome);
-            this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Controls.Add(this.btnDisconnect);
             this.panel1.Controls.Add(this.btnConnect);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -53,26 +55,32 @@
             this.panel1.Size = new System.Drawing.Size(200, 450);
             this.panel1.TabIndex = 0;
             // 
+            // _statusTextbox
+            // 
+            this._statusTextbox.Location = new System.Drawing.Point(12, 70);
+            this._statusTextbox.Multiline = true;
+            this._statusTextbox.Name = "_statusTextbox";
+            this._statusTextbox.ReadOnly = true;
+            this._statusTextbox.Size = new System.Drawing.Size(170, 296);
+            this._statusTextbox.TabIndex = 5;
+            // 
+            // lblUser
+            // 
+            this.lblUser.AutoSize = true;
+            this.lblUser.Location = new System.Drawing.Point(31, 12);
+            this.lblUser.Name = "lblUser";
+            this.lblUser.Size = new System.Drawing.Size(0, 15);
+            this.lblUser.TabIndex = 4;
+            // 
             // btnHome
             // 
-            this.btnHome.Location = new System.Drawing.Point(54, 41);
+            this.btnHome.Location = new System.Drawing.Point(54, 38);
             this.btnHome.Name = "btnHome";
             this.btnHome.Size = new System.Drawing.Size(75, 23);
             this.btnHome.TabIndex = 3;
             this.btnHome.Text = "Home";
             this.btnHome.UseVisualStyleBackColor = true;
             this.btnHome.Click += new System.EventHandler(this.btnHome_Click);
-            // 
-            // btnLogout
-            // 
-            this.btnLogout.Location = new System.Drawing.Point(54, 12);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(75, 23);
-            this.btnLogout.TabIndex = 2;
-            this.btnLogout.Text = "Logout";
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Visible = false;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // btnDisconnect
             // 
@@ -107,7 +115,7 @@
             // 
             // ucLogin1
             // 
-            this.ucLogin1.Location = new System.Drawing.Point(223, 0);
+            this.ucLogin1.Location = new System.Drawing.Point(188, 0);
             this.ucLogin1.LogInBtnEnabled = false;
             this.ucLogin1.Name = "ucLogin1";
             this.ucLogin1.Password = "";
@@ -132,12 +140,17 @@
             this.teacherViewClass1.Students = null;
             this.teacherViewClass1.SubmitBtnEnabled = true;
             this.teacherViewClass1.TabIndex = 6;
+            this.teacherViewClass1.ViewStudentEnabled = true;
             // 
             // ucParentMainView1
             // 
-            this.ucParentMainView1.Location = new System.Drawing.Point(206, 3);
+            this.ucParentMainView1.Classes = null;
+            this.ucParentMainView1.InvalidMsgVisible = false;
+            this.ucParentMainView1.JoinClassCode = "";
+            this.ucParentMainView1.Location = new System.Drawing.Point(188, 0);
             this.ucParentMainView1.Name = "ucParentMainView1";
             this.ucParentMainView1.Size = new System.Drawing.Size(600, 450);
+            this.ucParentMainView1.StudentMark = "";
             this.ucParentMainView1.TabIndex = 7;
             // 
             // Form3
@@ -155,6 +168,7 @@
             this.Text = "Form3";
             this.Load += new System.EventHandler(this.Form3_Load);
             this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -171,5 +185,7 @@
         private Button btnHome;
         private TeacherViewClass teacherViewClass1;
         private ucParentMainView ucParentMainView1;
+        private Label lblUser;
+        private TextBox _statusTextbox;
     }
 }

@@ -10,17 +10,18 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary.Handlers.Commands
 {
-    //public class InsertStudentToClassHandler : IRequestHandler<InsertStudentToClassCommand, StudentModel>
-    //{
-    //    private readonly IDataAccess _data;
+    public class InsertStudentToClassHandler : IRequestHandler<InsertStudentToClassCommand, bool>
+    {
+        private readonly IDataAccess _data;
 
-    //    public InsertStudentToClassHandler(IDataAccess data)
-    //    {
-    //        _data = data;
-    //    }
-    //    public Task<StudentModel> Handle(InsertStudentToClassCommand request, CancellationToken cancellationToken)
-    //    {
-    //        return Task.FromResult(_data.InsertTeacher(request.Name, request.UserName, request.Password, request.ClassIds));
-    //    }
-    // }
+        public InsertStudentToClassHandler(IDataAccess data)
+        {
+            _data = data;
+        }
+        public Task<bool> Handle(InsertStudentToClassCommand request, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(_data.InsertStudentToClass(request.ParentId, request.ModuleCode));
+        }
+
+    }
 }

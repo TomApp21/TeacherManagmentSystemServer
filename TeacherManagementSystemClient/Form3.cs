@@ -33,12 +33,6 @@ namespace TeacherManagementSystemClient
         private UserModel thisUser;
 
 
-        private Dictionary<string, string> teachersClasses = new Dictionary<string, string>();
-
-
-        private string selectedClassValue;
-        private string selectedStudentValue;
-
         public Form3()
         {
             InitializeComponent();
@@ -50,7 +44,6 @@ namespace TeacherManagementSystemClient
             btnConnect.Enabled = true;
             btnDisconnect.Enabled = false;
             btnHome.Visible = false;
-            btnLogout.Visible = false;
             //_sendCommandBtn.Enabled = false;
 
             this.ucLogin1.LoginClicked += new EventHandler(LoginEventHandler_LoginClicked);
@@ -69,6 +62,9 @@ namespace TeacherManagementSystemClient
             this.teacherViewClass1.SelectedStudentValueChanged += new EventHandler(SelectedStudentValue_Changed);
 
             this.teacherViewClass1.SubmitStudentMarkClicked += new EventHandler(SubmitMark_Clicked);
+
+            this.ucParentMainView1.ViewParentClassMark += new EventHandler(ViewParentMark_Clicked);
+            this.ucParentMainView1.JoinClass += new EventHandler(JoinClassCode_Clicked);
         }
 
 
@@ -90,46 +86,21 @@ namespace TeacherManagementSystemClient
                 ucLogin1.LogInBtnEnabled = true;
 
                 btnHome.Visible = true;
-                btnLogout.Visible = true;
-
-                //btnDisconnect.Enabled = true; SEND
             }
             catch (Exception ex)
             {
-                //_statusTextbox.Text += CRLF + "Problem connecting to server.";
-                //_statusTextbox.Text += CRLF + ex.ToString();
+                _statusTextbox.Text += CRLF + "Problem connecting to server.";
+                _statusTextbox.Text += CRLF + ex.ToString();
             }
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             DisconnectFromServer();
+            this.Close();
 
         }
 
-
-
-
-        //private void SendCommandButtonHandler(object sender, EventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (_client.Connected)
-        //        {
-        //            StreamWriter sw = new StreamWriter(_client.GetStream());
-        //            sw.WriteLine(_commandTextbox.Text);
-        //            sw.Flush();
-
-        //            _commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
-        //            _commandTextbox.Text = String.Empty;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _statusTextbox.Text += CRLF + "Problem sending command to the server!";
-        //        _statusTextbox.Text += CRLF + ex.ToString();
-        //    }
-        //}
 
         #endregion
 
@@ -189,12 +160,11 @@ namespace TeacherManagementSystemClient
                                     userModel.IsTeacher = Convert.ToBoolean(deserializedMsg[5].ToString());
 
                                     thisUser = userModel;
-
-                                    // show logout button
-                                    btnLogout.Enabled = true;
+                                    SetUserName();
 
                                     if (thisUser.IsTeacher)
                                     {
+                                        //btnHome.Visible = true;
                                         ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
                                         ucTeacherMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
 
@@ -202,6 +172,7 @@ namespace TeacherManagementSystemClient
                                     }
                                     else
                                     {
+                                        //btnHome.Visible = false;
                                         ucParentMainView1.InvokeExecute(x => x.BringToFront());
                                         ucParentMainView1.InvokeExecute(x => x.Dock = DockStyle.Fill);
 
@@ -283,7 +254,25 @@ namespace TeacherManagementSystemClient
                                     PopulateParentClassListbox(dic);
                                     break;
                                 }
-                                
+                            case (MessageTypeEnum.GetParentClassMark):
+                                {
+                                    ucParentMainView1.InvokeExecute(x => x.StudentMark = deserializedMsg[1].ToString());
+
+                                    break;
+                                }
+                            case (MessageTypeEnum.JoinClass):
+                                {
+                                    if (deserializedMsg[1].ToString() == "True")
+                                    {
+                                        GetParentsClasses();
+                                    }
+                                    else
+                                    {
+                                        ucParentMainView1.InvokeExecute(x => x.InvalidMsgVisible = true);
+                                    }
+
+                                    break;
+                                }
 
 
 
@@ -325,8 +314,8 @@ namespace TeacherManagementSystemClient
             }
             catch (Exception ex)
             {
-                //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Problem disconnecting from the server.");
-                //_statusTextbox.InvokeExecute(stb => stb.Text += CRLF +  ex.ToString());
+                _statusTextbox.InvokeExecute(stb => stb.Text += CRLF + "Problem disconnecting from the server.");
+                _statusTextbox.InvokeExecute(stb => stb.Text += CRLF + ex.ToString());
             }
         }
 
@@ -356,8 +345,8 @@ namespace TeacherManagementSystemClient
             }
             catch (Exception ex)
             {
-                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
-                //_statusTextbox.Text += CRLF + ex.ToString();
+                _statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                _statusTextbox.Text += CRLF + ex.ToString();
             }
         }
 
@@ -376,6 +365,7 @@ namespace TeacherManagementSystemClient
 
                     var serializedMsg = JsonSerializer.Serialize(msg);
 
+                    ucParentMainView1.InvokeExecute(x => x.JoinClassCode = "");
 
                     sw.WriteLine(serializedMsg);
                     sw.Flush();
@@ -502,14 +492,18 @@ namespace TeacherManagementSystemClient
             }
             catch (Exception ex)
             {
-                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
-                //_statusTextbox.Text += CRLF + ex.ToString();
+                ////_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                ////_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
 
         public void CreateClass_CreateClassClicked(object sender, EventArgs e)
         {
             userControl31.InvokeExecute(x => x.BringToFront());
+             userControl31.InvokeExecute(x => x.Dock = DockStyle.Fill);
+
+
+        
         }
 
         public void DeleteClass_Clicked(object sender, EventArgs e)
@@ -535,14 +529,13 @@ namespace TeacherManagementSystemClient
             }
             catch (Exception ex)
             {
-                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
-                //_statusTextbox.Text += CRLF + ex.ToString();
+                _statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                _statusTextbox.Text += CRLF + ex.ToString();
             }
         }
 
         private void SelectedClassValue_Changed(object sender, EventArgs e)
         {
-            selectedClassValue = ucTeacherMainView1.SelectedClassValue;
         }
 
 
@@ -588,7 +581,6 @@ namespace TeacherManagementSystemClient
         #endregion
         public void SelectedStudentValue_Changed(object sender, EventArgs e)
         {
-            selectedStudentValue = teacherViewClass1.SelectedStudentValue;
         }
         
 
@@ -682,9 +674,8 @@ namespace TeacherManagementSystemClient
 
                     sw.WriteLine(serializedMsg);
                     sw.Flush();
-                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
-                    //_commandTextbox.Text = String.Empty;
                                 teacherViewClass1.InvokeExecute(x => x.BringToFront());
+                                        teacherViewClass1.InvokeExecute(x => x.Dock = DockStyle.Fill);
 
                 }
             }
@@ -694,7 +685,79 @@ namespace TeacherManagementSystemClient
                 //_statusTextbox.Text += CRLF + ex.ToString();
             }
         }
-        #region
+
+        #region Parent Event Handler
+        
+        public void ViewParentMark_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                    ArrayList msg = new ArrayList();
+                    msg.Add(MessageTypeEnum.GetParentClassMark);
+                    msg.Add(thisUser.UserId);
+                    msg.Add(ucParentMainView1.SelectedParentClassValue);  // selectedStudentValue);
+                    var serializedMsg = JsonSerializer.Serialize(msg);
+
+                    sw.WriteLine(serializedMsg);
+                    sw.Flush();
+                    //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                    //_commandTextbox.Text = String.Empty;
+                    //teacherViewClass1.InvokeExecute(x => x.SubmitBtnEnabled = true);
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+
+
+
+        }
+
+        public void JoinClassCode_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    if (ucParentMainView1.JoinClassCode != null || ucParentMainView1.JoinClassCode != string.Empty)
+                    {
+                        StreamWriter sw = new StreamWriter(_client.GetStream());
+
+                        ArrayList msg = new ArrayList();
+                        msg.Add(MessageTypeEnum.JoinClass);
+                        msg.Add(thisUser.UserId);
+                        msg.Add(ucParentMainView1.JoinClassCode);
+                        var serializedMsg = JsonSerializer.Serialize(msg);
+
+                        sw.WriteLine(serializedMsg);
+                        sw.Flush();
+                        //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
+                        //_commandTextbox.Text = String.Empty;
+                        //teacherViewClass1.InvokeExecute(x => x.SubmitBtnEnabled = true);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                _statusTextbox.Text += CRLF + ex.ToString();
+            }
+
+
+
+        }
+
+
+
+        
+
         #endregion
 
 
@@ -727,6 +790,7 @@ namespace TeacherManagementSystemClient
                 ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
             }
 
+            
             ucTeacherMainView1.InvokeExecute(x => x.TeachersClasses = teachersClasses);
             ucTeacherMainView1.InvokeExecute(x => x.UpdateDataSource());
         }
@@ -747,6 +811,7 @@ namespace TeacherManagementSystemClient
             //    ucTeacherMainView1.InvokeExecute(x => x.DeleteEnabled = true);
             //}
 
+            teacherViewClass1.InvokeExecute(x => x.SubmitBtnEnabled = false);
             teacherViewClass1.InvokeExecute(x => x.Students = theseStudents);
             teacherViewClass1.InvokeExecute(x => x.UpdateDataSource());
         }
@@ -801,8 +866,7 @@ namespace TeacherManagementSystemClient
 
                         ucTeacherMainView1.InvokeExecute(x => x.BringToFront());
                         teacherViewClass1.InvokeExecute(x => x.StudentMark = "");
-                        //_commandTextbox.Text += CRLF + "Command sent to server: " + _commandTextbox.Text;
-                        //_commandTextbox.Text = String.Empty;
+
                     }
                 }
                 catch (Exception ex)
@@ -816,6 +880,28 @@ namespace TeacherManagementSystemClient
 
             }
         }
+        private void SetUserName()
+        {
+            try
+            {
+                if (_client.Connected)
+                {
+                    teacherViewClass1.InvokeExecute(x => x.SetUserName = thisUser.Name);
+                    ucParentMainView1.InvokeExecute(x => x.SetUserName = thisUser.Name);
+                    teacherViewClass1.InvokeExecute(x => x.SetUserName = thisUser.Name);
+                    userControl31.InvokeExecute(x => x.SetUserName = thisUser.Name);
+                    teacherViewClass1.InvokeExecute(x => x.SetUserName = thisUser.Name);
+                }
+            }
+            catch (Exception ex)
+            {
+                //_statusTextbox.Text += CRLF + "Problem sending command to the server!";
+                //_statusTextbox.Text += CRLF + ex.ToString();
+            }
+        }
+
+         
+
 
         private void Form3_Load(object sender, EventArgs e)
         {

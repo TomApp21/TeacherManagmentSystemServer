@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelusername = new System.Windows.Forms.Label();
             this.textBoxClassName = new System.Windows.Forms.TextBox();
             this.lblClasName = new System.Windows.Forms.Label();
             this.lblStartDate = new System.Windows.Forms.Label();
@@ -40,14 +40,13 @@
             this.buttonCreateClass = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1
+            // labelusername
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(110, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 15);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "This is third";
+            this.labelusername.AutoSize = true;
+            this.labelusername.Location = new System.Drawing.Point(3, 0);
+            this.labelusername.Name = "labelusername";
+            this.labelusername.Size = new System.Drawing.Size(0, 15);
+            this.labelusername.TabIndex = 2;
             // 
             // textBoxClassName
             // 
@@ -136,7 +135,7 @@
             this.Controls.Add(this.lblStartDate);
             this.Controls.Add(this.lblClasName);
             this.Controls.Add(this.textBoxClassName);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelusername);
             this.Name = "UserControl3";
             this.Size = new System.Drawing.Size(600, 450);
             this.ResumeLayout(false);
@@ -146,7 +145,7 @@
 
         #endregion
 
-        private Label label1;
+        private Label labelusername;
         private TextBox textBoxClassName;
         private Label lblClasName;
         private Label lblStartDate;

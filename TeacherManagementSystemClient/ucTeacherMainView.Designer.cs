@@ -40,6 +40,7 @@
             this.lblBroadcast = new System.Windows.Forms.Label();
             this.btnSortNoDesc = new System.Windows.Forms.Button();
             this.btnSortNameDesc = new System.Windows.Forms.Button();
+            this.lblUsername = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listboxTeacherClasses
@@ -128,6 +129,7 @@
             this.button1.TabIndex = 8;
             this.button1.Text = "Send";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // lblBroadcast
             // 
@@ -158,10 +160,19 @@
             this.btnSortNameDesc.UseVisualStyleBackColor = true;
             this.btnSortNameDesc.Click += new System.EventHandler(this.btnSortNameDesc_Click);
             // 
+            // lblUsername
+            // 
+            this.lblUsername.AutoSize = true;
+            this.lblUsername.Location = new System.Drawing.Point(0, 0);
+            this.lblUsername.Name = "lblUsername";
+            this.lblUsername.Size = new System.Drawing.Size(0, 15);
+            this.lblUsername.TabIndex = 12;
+            // 
             // ucTeacherMainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblUsername);
             this.Controls.Add(this.btnSortNameDesc);
             this.Controls.Add(this.btnSortNoDesc);
             this.Controls.Add(this.lblBroadcast);
@@ -195,6 +206,7 @@
         private Label lblBroadcast;
         private Button btnSortNoDesc;
         private Button btnSortNameDesc;
+        private Label lblUsername;
     }
 
 
